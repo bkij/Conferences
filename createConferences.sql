@@ -67,7 +67,7 @@ CREATE TABLE ConferenceReservations (
 	reservation_details_id int NOT NULL
 )
 
-CREATE TABLE WorkshopsReservations (
+CREATE TABLE WorkshopReservations (
 	reservation_id int PRIMARY KEY IDENTITY(1,1),
 	workshop_id int NOT NULL,
 	reservation_details_id int NOT NULL
@@ -162,5 +162,5 @@ ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end
 	CHECK(date_start > GETDATE())
 ALTER TABLE Conferences
-	ADD CONSTRAINT ck_date_end_gt_date_begin
-	CHECK(date_end >= DATEADD(date_begin))
+	ADD CONSTRAINT ck_date_end_gt_date_start
+	CHECK(date_end >= DATEADD(day, 1, date_start))
