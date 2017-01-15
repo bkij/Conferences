@@ -97,42 +97,70 @@ CREATE TABLE Payments (
 
 -- Relations
 ALTER TABLE Clients
-	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id)
+	ADD CONSTRAINT fk_client_company
+	FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 
 ALTER TABLE ConferenceDays
-	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES Conferences(conference_id)
+	ADD CONSTRAINT fk_conference_day_conference
+	FOREIGN KEY (conference_id) REFERENCES Conferences(conference_id)
 
 ALTER TABLE ConferenceAttendees
-	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+	ADD CONSTRAINT fk_c_attendee_client
+	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
 ALTER TABLE ConferenceAttendees
-	ADD CONSTRAINT conference_day_id REFERENCES ConferenceDays(conference_day_id)
+	ADD CONSTRAINT fk_c_attendee_conference_day
+	FOREIGN KEY (conference_day_id) REFERENCES ConferenceDays(conference_day_id)
 
 ALTER TABLE WorkshopAttendees
-	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+	ADD CONSTRAINT fk_w_attendee_client 
+	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
 ALTER TABLE WorkshopAttendees
-	ADD CONSTRAINT workshop FOREIGN KEY REFERENCES Workshops(workshop_id)
+	ADD CONSTRAINT fk_w_attendee_workshop
+	FOREIGN KEY (workshop_id) REFERENCES Workshops(workshop_id)
 
 ALTER TABLE Workshops
-	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES Conferences(conference_id)
+	ADD CONSTRAINT fk_workshop_conference
+	FOREIGN KEY (conference_id) REFERENCES Conferences(conference_id)
 
 ALTER TABLE ConferenceReservations
-	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES	Conferences(conference_id)
+	ADD CONSTRAINT fk_c_reservation_conference
+	FOREIGN KEY (conference_id) REFERENCES Conferences(conference_id)
 ALTER TABLE ConferenceReservations
-	ADD CONSTRAINT reservation_details_id FOREIGN KEY REFERENCES ReservationDetails(reservation_details_id)
+	ADD CONSTRAINT fk_c_reservation_details
+	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
 
 ALTER TABLE WorkshopReservations
-	ADD CONSTRAINT workshop_id FOREIGN KEY REFERENCES Workshops(workshop_id)
+	ADD CONSTRAINT fk_w_reservation_workshop
+	FOREIGN KEY (workshop_id) REFERENCES Workshops(workshop_id)
 ALTER TABLE WorkshopReservations
-	ADD CONSTRAINT reservation_details_id FOREIGN KEY REFERENCES ReservationDetails(reservation_details_id)
+	ADD CONSTRAINT fk_w_reservation_details
+	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
 
 ALTER TABLE ReservationDetails
-	ADD CONSTRAINT payment_id FOREIGN KEY REFERENCES Payments(payment_id)
+	ADD CONSTRAINT fk_reservation_payment
+	FOREIGN KEY (payment_id) REFERENCES Payments(payment_id)
 ALTER TABLE ReservationDetails
-	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES	Clients(client_id)
+	ADD CONSTRAINT fk_reservation_client
+	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
 ALTER TABLE ReservationDetails
-	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id)
+	ADD CONSTRAINT fk_reservation_company
+	FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 
 ALTER TABLE Payments
-	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+	ADD CONSTRAINT fk_payment_client
+	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
 ALTER TABLE Payments
-	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id) 
+	ADD CONSTRAINT fk_payment_company
+	FOREIGN KEY (company_id) REFERENCES Companies(company_id) 
+
+-- Constraints
+
+ALTER TABLE Conferences
+	ADD CONSTRAINT ck_date_start
+	CHECK(date_start > GETDATE())
+ALTER TABLE Conferences
+	ADD CONSTRAINT ck_date_end
+	CHECK(date_start > GETDATE())
+ALTER TABLE Conferences
+	ADD CONSTRAINT ck_date_end_gt_date_begin
+	CHECK(date_end >= DATEADD(date_begin))
