@@ -7,9 +7,6 @@ CREATE DATABASE Conferences
 -- Create tables
 USE Conferences
 
--- TODO: Do we need object id checks on empty database?
--- TODO: Foreign keys by alter table -> constraints
-
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
 	company_id int,
