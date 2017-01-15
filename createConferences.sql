@@ -43,12 +43,12 @@ CREATE TABLE ConferenceDays (
 )
 
 CREATE TABLE ConferenceAttendees (
-	client_id int PRIMARY KEY IDENTITY(1,1),
+	client_id int NOT NULL,
 	conference_day_id int NOT NULL
 )
 
 CREATE TABLE WorkshopAttendees (
-	client_id int PRIMARY KEY IDENTITY(1,1),
+	client_id int NOT NULL,
 	workshop_id int NOT NULL
 )
 
@@ -76,9 +76,9 @@ CREATE TABLE WorkshopsReservations (
 -- TODO: some other configuration rather than id depending on a boolean?
 CREATE TABLE ReservationDetails (
 	reservation_details_id int PRIMARY KEY IDENTITY(1,1),
-	reservee_id int NOT NULL,
+	client_id int,
+	company_id int,
 	payment_id int,
-	is_reservee_company bit NOT NULL,
 	num_spots int NOT NULL,
 	reservation_date datetime NOT NULL,
 	reservation_cancellation_date datetime
@@ -86,10 +86,53 @@ CREATE TABLE ReservationDetails (
 
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
-	payer_id int NOT NULL,
+	client_id int,
+	company_id int,
 	date_paid datetime,
 	amount_paid money,
 	category varchar(10) NOT NULL
 )
 
--- TODO: Constrainty, defaulty, unikalnosc
+-- TODO: Constraints, defaults, uniques
+
+-- Relations
+ALTER TABLE Clients
+	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id)
+
+ALTER TABLE ConferenceDays
+	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES Conferences(conference_id)
+
+ALTER TABLE ConferenceAttendees
+	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+ALTER TABLE ConferenceAttendees
+	ADD CONSTRAINT conference_day_id REFERENCES ConferenceDays(conference_day_id)
+
+ALTER TABLE WorkshopAttendees
+	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+ALTER TABLE WorkshopAttendees
+	ADD CONSTRAINT workshop FOREIGN KEY REFERENCES Workshops(workshop_id)
+
+ALTER TABLE Workshops
+	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES Conferences(conference_id)
+
+ALTER TABLE ConferenceReservations
+	ADD CONSTRAINT conference_id FOREIGN KEY REFERENCES	Conferences(conference_id)
+ALTER TABLE ConferenceReservations
+	ADD CONSTRAINT reservation_details_id FOREIGN KEY REFERENCES ReservationDetails(reservation_details_id)
+
+ALTER TABLE WorkshopReservations
+	ADD CONSTRAINT workshop_id FOREIGN KEY REFERENCES Workshops(workshop_id)
+ALTER TABLE WorkshopReservations
+	ADD CONSTRAINT reservation_details_id FOREIGN KEY REFERENCES ReservationDetails(reservation_details_id)
+
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT payment_id FOREIGN KEY REFERENCES Payments(payment_id)
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES	Clients(client_id)
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id)
+
+ALTER TABLE Payments
+	ADD CONSTRAINT client_id FOREIGN KEY REFERENCES Clients(client_id)
+ALTER TABLE Payments
+	ADD CONSTRAINT company_id FOREIGN KEY REFERENCES Companies(company_id) 
