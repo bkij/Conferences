@@ -74,7 +74,6 @@ CREATE TABLE WorkshopReservations (
 	reservation_details_id int NOT NULL
 )
 
--- TODO: some other configuration rather than id depending on a boolean?
 CREATE TABLE ReservationDetails (
 	reservation_details_id int PRIMARY KEY IDENTITY(1,1),
 	client_id int,
@@ -85,6 +84,7 @@ CREATE TABLE ReservationDetails (
 	reservation_cancellation_date datetime
 )
 
+-- TODO: check - amount_paid == price of workshop/conference
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
 	client_id int,
@@ -170,3 +170,14 @@ ALTER TABLE ConferenceDays
 	ADD CONSTRAINT ck_uniq_date
 	UNIQUE (date)
 
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT ck_reservation_date
+	CHECK(reservation_date > GETDATE())
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT ck_cancellation_date
+	CHECK(reservation_cancellation_date > reservation_date)
+
+	
+ALTER TABLE Payments
+	ADD CONSTRAINT ck_payment_date
+	CHECK(date_paid > GETDATE())
