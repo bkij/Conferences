@@ -52,9 +52,10 @@ CREATE TABLE WorkshopAttendees (
 	workshop_id int NOT NULL
 )
 
+-- TODO: constraint/trigger - day & year of workshop.date == day & year of conference_day.date
 CREATE TABLE Workshops (
 	workshop_id int PRIMARY KEY IDENTITY(1,1),
-	conference_id int NOT NULL,
+	conference_day_id int NOT NULL,
 	title nvarchar(50) NOT NULL,
 	num_spots int NOT NULL,
 	date datetime NOT NULL,
@@ -119,8 +120,8 @@ ALTER TABLE WorkshopAttendees
 	FOREIGN KEY (workshop_id) REFERENCES Workshops(workshop_id)
 
 ALTER TABLE Workshops
-	ADD CONSTRAINT fk_workshop_conference
-	FOREIGN KEY (conference_id) REFERENCES Conferences(conference_id)
+	ADD CONSTRAINT fk_workshop_conference_day
+	FOREIGN KEY (conference_day_id) REFERENCES ConferenceDays(conference_day_id)
 
 ALTER TABLE ConferenceReservations
 	ADD CONSTRAINT fk_c_reservation_conference
@@ -164,3 +165,8 @@ ALTER TABLE Conferences
 ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end_gt_date_start
 	CHECK(date_end >= DATEADD(day, 1, date_start))
+
+ALTER TABLE ConferenceDays
+	ADD CONSTRAINT ck_uniq_date
+	UNIQUE (date)
+
