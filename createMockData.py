@@ -53,7 +53,7 @@ day = int(date[:2])
     
 with open('clientData.csv', 'wb') as clientOut:
     # The rows are: firstname, lastname, initial
-    clientWriter = csv.writer(clientOut, delimiter=',')
+    clientWriter = csv.writer(clientOut, delimiter='||')
     for i in range(10800):
         randGender = random.choice(['male', 'female'])
         randInitial = random.choice(text.alphabet(letter_case='upper'))
@@ -61,7 +61,7 @@ with open('clientData.csv', 'wb') as clientOut:
         
 with open('companyData.csv', 'wb') as companyOut:
     # The rows are: companyname, address, city, country, zipcode
-    companyWriter = csv.writer(companyOut, delimiter=',')
+    companyWriter = csv.writer(companyOut, delimiter='||')
     for i in range(250):
         companyWriter.writerow([business.company(), address.street_name() + Address.street_number(),
                                 address.city(), address.country(), address.postal_code()])
@@ -69,7 +69,7 @@ with open('companyData.csv', 'wb') as companyOut:
                                 
 with open('conferenceData.csv', 'wb') as confOut:
     # The rows are: date_start, date_end, name, price
-    confWriter = csv.writer(confOut, delimiter=',')
+    confWriter = csv.writer(confOut, delimiter='||')
     for i in range(72):
         randDateStart = date.date(start = '2010', end = '2013', fmt='dd-mm-yyyy')
         randDateEnd = getEndDate(randDateStart)
@@ -78,7 +78,7 @@ with open('conferenceData.csv', 'wb') as confOut:
                                 
 with open('conferenceDaysData.csv', 'wb') as confDaysOut:
     # The rows are: date, num_spots
-    confDayWriter = csv.writer(confDaysOut, delimiter=',')
+    confDayWriter = csv.writer(confDaysOut, delimiter='||')
     for dates in dateRanges:
         confDayDate = dates[0]
         while confDayDate != dates[1]:
@@ -88,7 +88,7 @@ with open('conferenceDaysData.csv', 'wb') as confDaysOut:
         
 with open('workshops.csv', 'wb') as workshopsOut
     # The rows are: title, num_spots, date, price
-    workshopWriter = csv.writer(workshopsOut, delimiter=',')
+    workshopWriter = csv.writer(workshopsOut, delimiter='||')
     for dates in dateRanges:
         workshopDate = dates[0]
         while workshopDate != dates[1]:
