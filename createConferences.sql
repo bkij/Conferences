@@ -161,7 +161,7 @@ ALTER TABLE Conferences
 	CHECK(date_start > GETDATE())
 ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end_gt_date_start
-	CHECK(date_end >= DATEADD(day, 1, date_start))
+	CHECK(date_end >= DATEADD(hh, 12, date_start))
 
 ALTER TABLE Companies
 	ADD CONSTRAINT dflt_company_country
