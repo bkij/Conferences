@@ -1,3 +1,4 @@
+-- TODO: Cascade on update/delete?
 -- Create an empty database
 USE master
 IF EXISTS(SELECT * FROM sys.databases WHERE name = 'Conferences')
