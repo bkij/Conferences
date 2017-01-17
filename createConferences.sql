@@ -91,6 +91,7 @@ CREATE TABLE Payments (
 )
 
 -- TODO: Constraints, defaults, uniques
+-- TODO: If time allows: Think about cancelling conferences/days with CASCADES and stuff
 
 -- Relations
 ALTER TABLE Clients
