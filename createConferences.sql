@@ -37,7 +37,7 @@ CREATE TABLE ConferenceDays (
 	conference_day_id int PRIMARY KEY IDENTITY(1,1),
 	conference_id int NOT NULL,
 	date datetime NOT NULL,
-	num_spots int NOT NULL
+	num_spots smallint NOT NULL
 )
 
 CREATE TABLE ConferenceAttendees (
@@ -55,7 +55,7 @@ CREATE TABLE Workshops (
 	workshop_id int PRIMARY KEY IDENTITY(1,1),
 	conference_day_id int NOT NULL,
 	title nvarchar(50) NOT NULL,
-	num_spots int NOT NULL,
+	num_spots smallint NOT NULL,
 	date datetime NOT NULL,
 	price money NOT NULL
 )
@@ -77,7 +77,7 @@ CREATE TABLE ReservationDetails (
 	client_id int,
 	company_id int,
 	payment_id int,
-	num_spots int NOT NULL,
+	num_spots smallint NOT NULL,
 	reservation_date datetime NOT NULL,
 	reservation_cancellation_date datetime
 )
