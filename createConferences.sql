@@ -56,7 +56,7 @@ CREATE TABLE Workshops (
 	title nvarchar(50) NOT NULL,
 	num_spots int NOT NULL,
 	date datetime NOT NULL,
-	price money
+	price money NOT NULL
 )
 
 CREATE TABLE ConferenceReservations (
@@ -84,8 +84,6 @@ CREATE TABLE ReservationDetails (
 -- TODO: check - amount_paid == price of workshop/conference
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
-	client_id int,
-	company_id int,
 	date_paid datetime,
 	amount_paid money,
 	category varchar(10) NOT NULL
@@ -182,3 +180,8 @@ ALTER TABLE ReservationDetails
 ALTER TABLE Payments
 	ADD CONSTRAINT ck_payment_date
 	CHECK(date_paid > GETDATE())
+
+-- Either a client_id or company_id must be null
+ALTER TABLE ReservationDetails
+	ADD CONSTRAINT ck_either_client_or_company
+	CHECK((company_id IS NULL AND client_id IS NOT NULL) OR (company_id IS NOT NULL AND client_id IS NULL))
