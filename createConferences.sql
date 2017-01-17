@@ -163,6 +163,10 @@ ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end_gt_date_start
 	CHECK(date_end >= DATEADD(day, 1, date_start))
 
+ALTER TABLE Companies
+	ADD CONSTRAINT dflt_company_country
+	DEFAULT 'Polska' FOR country
+
 ALTER TABLE ConferenceDays
 	ADD CONSTRAINT ck_uniq_date
 	UNIQUE (date)
