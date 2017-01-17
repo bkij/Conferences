@@ -10,10 +10,11 @@ USE Conferences
 
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
-	company_id int,
+	company_id int UNIQUE,
+	studentcard_number int UNIQUE,
 	firstname nvarchar(50) NOT NULL,
 	lastname nvarchar(50) NOT NULL,
-	initial nvarchar(1)
+	initial nvarchar(1),
 )
 
 CREATE TABLE Companies (
@@ -36,7 +37,7 @@ CREATE TABLE Conferences (
 CREATE TABLE ConferenceDays (
 	conference_day_id int PRIMARY KEY IDENTITY(1,1),
 	conference_id int NOT NULL,
-	date datetime NOT NULL,
+	date datetime UNIQUE NOT NULL,
 	num_spots smallint NOT NULL
 )
 
@@ -53,7 +54,7 @@ CREATE TABLE WorkshopAttendees (
 -- TODO: constraint/trigger - day & year of workshop.date == day & year of conference_day.date
 CREATE TABLE Workshops (
 	workshop_id int PRIMARY KEY IDENTITY(1,1),
-	conference_day_id int NOT NULL,
+	conference_day_id int UNIQUE NOT NULL,
 	title nvarchar(50) NOT NULL,
 	num_spots smallint NOT NULL,
 	date datetime NOT NULL,
@@ -74,12 +75,19 @@ CREATE TABLE WorkshopReservations (
 
 CREATE TABLE ReservationDetails (
 	reservation_details_id int PRIMARY KEY IDENTITY(1,1),
-	client_id int,
-	company_id int,
-	payment_id int,
+	client_id int UNIQUE,
+	company_id int UNIQUE,
+	payment_id int UNIQUE,
+	studentcard_pool_id int UNIQUE,
 	num_spots smallint NOT NULL,
 	reservation_date datetime NOT NULL,
 	reservation_cancellation_date datetime
+)
+
+-- TODO: Think how to automatically increment pool_id
+CREATE TABLE StudentcardPool (
+	studentcard_pool_id int NOT NULL,
+	studentcard_number int NOT NULL
 )
 
 -- TODO: check - amount_paid == price of workshop/conference
@@ -144,6 +152,10 @@ ALTER TABLE ReservationDetails
 	ADD CONSTRAINT fk_reservation_company
 	FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 
+ALTER TABLE StudentcardPool
+	ADD CONSTRAINT fk_studentcardpool_reservation
+	FOREIGN KEY (studentcard_pool_id) REFERENCES	ReservationDetails(studentcard_pool_id)
+
 ALTER TABLE Payments
 	ADD CONSTRAINT fk_payment_client
 	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
@@ -166,10 +178,6 @@ ALTER TABLE Conferences
 ALTER TABLE Companies
 	ADD CONSTRAINT dflt_company_country
 	DEFAULT 'Polska' FOR country
-
-ALTER TABLE ConferenceDays
-	ADD CONSTRAINT ck_uniq_date
-	UNIQUE (date)
 
 ALTER TABLE ReservationDetails
 	ADD CONSTRAINT ck_reservation_date
