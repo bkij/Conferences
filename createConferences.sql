@@ -32,14 +32,14 @@ CREATE TABLE Conferences (
 	date_start datetime NOT NULL,
 	date_end datetime NOT NULL,
 	name nvarchar(50) NOT NULL,
-	price money
 )
 
 CREATE TABLE ConferenceDays (
 	conference_day_id int PRIMARY KEY IDENTITY(1,1),
 	conference_id int NOT NULL,
 	date datetime UNIQUE NOT NULL,
-	num_spots smallint NOT NULL
+	num_spots smallint NOT NULL,
+	price money
 )
 
 CREATE TABLE ConferenceAttendees (
@@ -94,8 +94,7 @@ CREATE TABLE StudentcardPool (
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
 	date_paid datetime,
-	amount_paid money,
-	category varchar(10) NOT NULL
+	amount_paid money
 )
 
 -- TODO: Constraints, defaults, uniques
