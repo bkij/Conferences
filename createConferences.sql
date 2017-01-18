@@ -52,7 +52,6 @@ CREATE TABLE WorkshopAttendees (
 	workshop_id int NOT NULL
 )
 
--- TODO: constraint/trigger - day & year of workshop.date == day & year of conference_day.date
 CREATE TABLE Workshops (
 	workshop_id int PRIMARY KEY IDENTITY(1,1),
 	conference_day_id int UNIQUE NOT NULL,
@@ -80,6 +79,7 @@ CREATE TABLE ReservationDetails (
 	company_id int UNIQUE,
 	payment_id int UNIQUE,
 	studentcard_pool_id int UNIQUE,
+	cost money NOT NULL,
 	num_spots smallint NOT NULL,
 	reservation_date datetime NOT NULL,
 	reservation_cancellation_date datetime
@@ -91,7 +91,6 @@ CREATE TABLE StudentcardPool (
 	studentcard_number int NOT NULL
 )
 
--- TODO: check - amount_paid == price of workshop/conference
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
 	date_paid datetime,
