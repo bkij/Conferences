@@ -75,8 +75,8 @@ CREATE TABLE WorkshopReservations (
 
 CREATE TABLE ReservationDetails (
 	reservation_details_id int PRIMARY KEY IDENTITY(1,1),
-	client_id int UNIQUE,
-	company_id int UNIQUE,
+	client_id int,
+	company_id int,
 	payment_id int UNIQUE,
 	studentcard_pool_id int UNIQUE,
 	cost money NOT NULL,
