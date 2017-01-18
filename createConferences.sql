@@ -8,6 +8,7 @@ CREATE DATABASE Conferences
 -- Create tables
 USE Conferences
 
+-- TODO: Student card number - other type? International numbers?
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
 	company_id int UNIQUE,
