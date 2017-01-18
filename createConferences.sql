@@ -156,13 +156,6 @@ ALTER TABLE StudentcardPool
 	ADD CONSTRAINT fk_studentcardpool_reservation
 	FOREIGN KEY (studentcard_pool_id) REFERENCES	ReservationDetails(studentcard_pool_id)
 
-ALTER TABLE Payments
-	ADD CONSTRAINT fk_payment_client
-	FOREIGN KEY (client_id) REFERENCES Clients(client_id)
-ALTER TABLE Payments
-	ADD CONSTRAINT fk_payment_company
-	FOREIGN KEY (company_id) REFERENCES Companies(company_id) 
-
 -- Constraints
 
 ALTER TABLE Conferences
