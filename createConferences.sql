@@ -31,7 +31,7 @@ CREATE TABLE Conferences (
 	conference_id int PRIMARY KEY IDENTITY(1,1),
 	date_start datetime NOT NULL,
 	date_end datetime NOT NULL,
-	name nvarchar(50) NOT NULL,
+	title nvarchar(100) NOT NULL,
 )
 
 CREATE TABLE ConferenceDays (
@@ -55,7 +55,7 @@ CREATE TABLE WorkshopAttendees (
 CREATE TABLE Workshops (
 	workshop_id int PRIMARY KEY IDENTITY(1,1),
 	conference_day_id int NOT NULL,
-	title nvarchar(50) NOT NULL,
+	title nvarchar(100) NOT NULL,
 	num_spots smallint NOT NULL,
 	date datetime NOT NULL,
 	price money NOT NULL

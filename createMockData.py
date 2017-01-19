@@ -11,6 +11,8 @@ datetime = el.Datetime('pl')
 text = el.Text('pl')
 num = el.Numbers()
 
+daysByMonth = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+
 datesUsed = set()
 dateRanges = []
 numConfDays = 0
@@ -30,8 +32,8 @@ def getEndDate(date):
     day += random.randint(1,2)
     month = int(date[3:5])
     year = int(date[6:])
-    if day > 31:
-        day = day % 31
+    if day > daysByMonth[month]:
+        day = day % daysByMonth[month]
         month += 1
         if month > 12:
             month = month % 12
@@ -50,8 +52,8 @@ def incDate(date):
     day += 1
     month = int(date[3:5])
     year = int(date[6:])
-    if day > 31:
-        day = day % 31
+    if day > daysByMonth[month]:
+        day = day % daysByMonth[month]
         month += 1
         if month > 12:
             month = month % 12
@@ -100,11 +102,17 @@ with open('conferenceData.csv', 'w', encoding='utf-16') as confOut:
     confWriter = csv.writer(confOut, delimiter='~')
     for i in range(72):
         randDateStart = datetime.date(start = 2010, end = 2013)
-        if randDateStart in datesUsed:
-            continue
         randDateEnd = getEndDate(randDateStart)
+        currDate = randDateStart
+        breakOuter = False
+        while currDate != incDate(randDateEnd):
+            if currDate in datesUsed:
+                breakOuter = True
+            currDate = incDate(currDate)
+        if breakOuter:
+            break
         dateRanges.append([randDateStart, randDateEnd])
-        confWriter.writerow([i + 1, randDateStart, randDateEnd, text.title()])
+        confWriter.writerow([i + 1, randDateStart, randDateEnd, text.title()[:100]])
         used = randDateStart
         while used != randDateEnd:
             datesUsed.add(used)
@@ -157,7 +165,7 @@ with open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
             for i in range(random.randint(3,5)):
                 price = business.price()[:-2]
                 priceByWorkshop[idx] = price
-                workshopWriter.writerow([idx, confDayIdx ,text.title(), random.randint(30, 50), workshopDate + random.choice(hours), price])
+                workshopWriter.writerow([idx, confDayIdx ,text.title()[:100], random.randint(30, 50), workshopDate + random.choice(hours), price])
                 workshopsByConfDay[confDayIdx].append(idx)
                 idx += 1
             workshopDate = incDate(workshopDate)
@@ -166,7 +174,7 @@ with open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
         for i in range(3):
             price = business.price()[:-2]
             priceByWorkshop[idx] = price
-            workshopWriter.writerow([idx, confDayIdx, text.title(), random.randint(30, 50), workshopDate + random.choice(hours), price])
+            workshopWriter.writerow([idx, confDayIdx, text.title()[:100], random.randint(30, 50), workshopDate + random.choice(hours), price])
             idx += 1
             workshopsByConfDay[confDayIdx].append(idx)
 

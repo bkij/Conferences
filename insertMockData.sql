@@ -102,6 +102,8 @@ WITH (
 	DATAFILETYPE = 'widechar'
 )
 
+
+SET DATEFORMAT dmy
 BULK INSERT Payments
 FROM 'C:\Users\kveld\Desktop\Conferences\payments.csv'
 WITH (
