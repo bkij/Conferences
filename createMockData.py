@@ -43,7 +43,7 @@ def getEndDate(date):
     if len(month) < 2:
         month = '0' + month
     year = str(year)
-    return day + '-' + month + '-' + year
+    return day + '.' + month + '.' + year
 
 def incDate(date):
     day = int(date[:2])
@@ -63,7 +63,7 @@ def incDate(date):
     if len(month) < 2:
         month = '0' + month
     year = str(year)
-    return day + '-' + month + '-' + year
+    return day + '.' + month + '.' + year
     
 def chunked(lst, chunkSize):
     newLst = []
@@ -72,34 +72,34 @@ def chunked(lst, chunkSize):
     return newLst
 
 def randCompanyOrNull():
-    return random.choice([random.randint(1,250), None])
+    return random.choice([random.randint(1,250), ' '])
     
-with open('clientData.csv', 'w', encoding='utf-8') as clientOut:
+with open('clientData.csv', 'w', encoding='utf-16') as clientOut:
     # The rows are: client_id, company_id, studentcard_number, firstname, lastname, initial
-    clientWriter = csv.writer(clientOut, delimiter='|')
+    clientWriter = csv.writer(clientOut, delimiter='~')
     for i in range(10800):
         randGender = random.choice(['male', 'female'])
         randInitial = random.choice(text.alphabet()).upper()
         companyId = randCompanyOrNull()
-        clientWriter.writerow([i + 1, companyId, None,
+        clientWriter.writerow([i + 1, companyId, ' ',
                                personal.name(gender = randGender), personal.surname(), randInitial])
         if companyId is not None: 
             companiesByAttendee[i + 1] = companyId
             
         
-with open('companyData.csv', 'w', encoding='utf-8') as companyOut:
+with open('companyData.csv', 'w', encoding='utf-16') as companyOut:
     # The rows are: company_id, companyname, address, city, country, zipcode
-    companyWriter = csv.writer(companyOut, delimiter='|')
+    companyWriter = csv.writer(companyOut, delimiter='~')
     for i in range(250):
         companyWriter.writerow([i + 1, business.company(), address.street_name() + ' ' + address.street_number(),
                                 address.city(), address.country(), address.postal_code()])
                                 
                                 
-with open('conferenceData.csv', 'w', encoding='utf-8') as confOut:
+with open('conferenceData.csv', 'w', encoding='utf-16') as confOut:
     # The rows are: conference_id date_start, date_end, name, price
-    confWriter = csv.writer(confOut, delimiter='|')
+    confWriter = csv.writer(confOut, delimiter='~')
     for i in range(72):
-        randDateStart = datetime.date(start = 2010, end = 2013, fmt="%d-%m-%y")
+        randDateStart = datetime.date(start = 2010, end = 2013)
         if randDateStart in datesUsed:
             continue
         randDateEnd = getEndDate(randDateStart)
@@ -111,9 +111,9 @@ with open('conferenceData.csv', 'w', encoding='utf-8') as confOut:
             used = incDate(used)
         datesUsed.add(randDateEnd)
                                 
-with open('conferenceDaysData.csv', 'w', encoding='utf-8') as confDaysOut:
+with open('conferenceDaysData.csv', 'w', encoding='utf-16') as confDaysOut:
     # The rows are: conference_day_id, conference_id, date, num_spots
-    confDayWriter = csv.writer(confDaysOut, delimiter='|')
+    confDayWriter = csv.writer(confDaysOut, delimiter='~')
     i = 1
     for idx, dates in enumerate(dateRanges):
         confDayDate = dates[0]
@@ -129,9 +129,9 @@ with open('conferenceDaysData.csv', 'w', encoding='utf-8') as confDaysOut:
         i += 1
     numConfDays = i
         
-with open('conferenceAttendees.csv', 'w', encoding='utf-8') as confAttOut:
+with open('conferenceAttendees.csv', 'w', encoding='utf-16') as confAttOut:
     # The rows: client_id, conference_day_id
-    confAttendeesWriter = csv.writer(confAttOut, delimiter='|')
+    confAttendeesWriter = csv.writer(confAttOut, delimiter='~')
     for i in range(1, numConfDays + 1):
         attendeeIdSet = set()
         attendeesPerDay = random.randint(60, 70)
@@ -144,9 +144,9 @@ with open('conferenceAttendees.csv', 'w', encoding='utf-8') as confAttOut:
             confAttendeesWriter.writerow([attId, i])
             
         
-with open('workshops.csv', 'w', encoding='utf-8') as workshopsOut:
+with open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
     # The rows are: wokrshop_id, conference_day_id, title, num_spots, date, price
-    workshopWriter = csv.writer(workshopsOut, delimiter='|')
+    workshopWriter = csv.writer(workshopsOut, delimiter='~')
     hours = [' 10:00', ' 14:00', ' 16:00', ' 18:00']
     idx = 1
     confDayIdx = 1
@@ -170,9 +170,9 @@ with open('workshops.csv', 'w', encoding='utf-8') as workshopsOut:
             idx += 1
             workshopsByConfDay[confDayIdx].append(idx)
 
-with open('workshopAttendees.csv', 'w', encoding='utf-8') as workshopAttOut:
+with open('workshopAttendees.csv', 'w', encoding='utf-16') as workshopAttOut:
     # Rows: client_id, workshop_id
-    workshopAttWriter = csv.writer(workshopAttOut, delimiter='|')
+    workshopAttWriter = csv.writer(workshopAttOut, delimiter='~')
     for idx, attList in attendByConfDay.items():
         if idx not in workshopsByConfDay:
             break
@@ -184,9 +184,9 @@ with open('workshopAttendees.csv', 'w', encoding='utf-8') as workshopAttOut:
                 workshopAttWriter.writerow([attID, workshops[i]])
                 attendByWorkshop[workshops[i]].append(attID)
                 
-with open('reservationDetails.csv', 'w', encoding='utf-8') as resDetOut:
+with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut:
     # Rows: reservation_details_is, client_id, company_id, payment_id, studencard_pool_id, cost, num_spots, reservation_date, reservation_cancellation_date
-    resDetailsWriter = csv.writer(resDetOut, delimiter='|')
+    resDetailsWriter = csv.writer(resDetOut, delimiter='~')
     attendeesByCompany = dict()
     soloAttendees = []
     i = 1
@@ -203,9 +203,9 @@ with open('reservationDetails.csv', 'w', encoding='utf-8') as resDetOut:
                 break
             cost = len(attList) * (1 - 0.85) * float(priceByConfDay[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009, fmt="%d-%m-%y")
+            date = datetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
-            resDetailsWriter.writerow([i, None, company, i, None, cost, len(attList), date, None])
+            resDetailsWriter.writerow([i, ' ', company, i, ' ', cost, len(attList), date, ' '])
             confReserves.append([idx, i])
             i += 1
         for att in soloAttendees:
@@ -213,9 +213,9 @@ with open('reservationDetails.csv', 'w', encoding='utf-8') as resDetOut:
                 break
             cost = (1 - 0.85) * float(priceByConfDay[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009, fmt="%d-%m-%y")
+            date = datetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
-            resDetailsWriter.writerow([i, att, None, i, None, cost, 1, date, None])
+            resDetailsWriter.writerow([i, att, ' ', i, ' ', cost, 1, date, ' '])
             confReserves.append([idx, i])
             i += 1
     attendeesByCompany = dict()
@@ -232,9 +232,9 @@ with open('reservationDetails.csv', 'w', encoding='utf-8') as resDetOut:
                 break
             cost = len(attList) * (1 - 0.85) * float(priceByWorkshop[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009, fmt="%d-%m-%y")
+            date = datetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
-            resDetailsWriter.writerow([i, None, company, i, None, cost, len(attList), date, None])
+            resDetailsWriter.writerow([i, ' ', company, i, ' ', cost, len(attList), date, ' '])
             workshopReserves.append([idx, i])
             i += 1
         for att in soloAttendees:
@@ -242,27 +242,27 @@ with open('reservationDetails.csv', 'w', encoding='utf-8') as resDetOut:
                 break
             cost = (1 - 0.85) * float(priceByWorkshop[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009, fmt="%d-%m-%y")
+            date = datetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
-            resDetailsWriter.writerow([i, att, None, i, None, cost, 1, date, None])
+            resDetailsWriter.writerow([i, att, ' ', i, ' ', cost, 1, date, ' '])
             workshopReserves.append([idx, i])
             i += 1
 
-with open('workshopReservations.csv', 'w', encoding='utf-8') as wshpResOut:
-    wshpResWriter = csv.writer(wshpResOut, delimiter='|')
+with open('workshopReservations.csv', 'w', encoding='utf-16') as wshpResOut:
+    wshpResWriter = csv.writer(wshpResOut, delimiter='~')
     i = 1
     for row in workshopReserves:
         wshpResWriter.writerow([i, row[0], row[1]])
         i += 1
         
-with open('conferenceReservations.csv', 'w', encoding='utf-8') as confResOut:
-    confResWriter = csv.writer(confResOut, delimiter='|')
+with open('conferenceReservations.csv', 'w', encoding='utf-16') as confResOut:
+    confResWriter = csv.writer(confResOut, delimiter='~')
     i = 1
     for row in confReserves:
         confResWriter.writerow([i, row[0], row[1]])
         i += 1
         
-with open('payments.csv', 'w', encoding='utf-8') as paymentOut:
-    paymentWriter = csv.writer(paymentOut, delimiter='|')
+with open('payments.csv', 'w', encoding='utf-16') as paymentOut:
+    paymentWriter = csv.writer(paymentOut, delimiter='~')
     for idx, cost in costByReserv.items():
         paymentWriter.writerow([idx, incDate(dateByReserv[idx]), cost])
