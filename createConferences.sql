@@ -11,11 +11,11 @@ USE Conferences
 -- TODO: Student card number - other type? International numbers?
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
-	company_id int UNIQUE,
-	studentcard_number int UNIQUE,
+	company_id int,
+	studentcard_number int,
 	firstname nvarchar(50) NOT NULL,
 	lastname nvarchar(50) NOT NULL,
-	initial nvarchar(1),
+	initial nchar(1),
 )
 
 CREATE TABLE Companies (
