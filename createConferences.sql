@@ -1,12 +1,14 @@
 -- TODO: Cascade on update/delete?
 -- Create an empty database
 USE master
+GO
 IF EXISTS(SELECT * FROM sys.databases WHERE name = 'Conferences')
 DROP DATABASE Conferences
 CREATE DATABASE Conferences
 
 -- Create tables
 USE Conferences
+GO
 
 -- TODO: Student card number - other type? International numbers?
 CREATE TABLE Clients (
