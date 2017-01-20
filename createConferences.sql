@@ -65,7 +65,7 @@ CREATE TABLE Workshops (
 
 CREATE TABLE ConferenceReservations (
 	reservation_id int PRIMARY KEY IDENTITY(1,1),
-	conference_id int NOT NULL,
+	conference_day_id int NOT NULL,
 	reservation_details_id int NOT NULL
 )
 
@@ -130,7 +130,7 @@ ALTER TABLE Workshops
 
 ALTER TABLE ConferenceReservations
 	ADD CONSTRAINT fk_c_reservation_conference
-	FOREIGN KEY (conference_id) REFERENCES Conferences(conference_id)
+	FOREIGN KEY (conference_day_id) REFERENCES ConferenceDays(conference_day_id)
 ALTER TABLE ConferenceReservations
 	ADD CONSTRAINT fk_c_reservation_details
 	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
