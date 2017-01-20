@@ -80,7 +80,6 @@ CREATE TABLE ReservationDetails (
 	client_id int,
 	company_id int,
 	payment_id int,
-	studentcard_pool_id int,
 	cost money NOT NULL,
 	num_spots smallint NOT NULL,
 	num_students smallint NOT NULL,
@@ -88,9 +87,8 @@ CREATE TABLE ReservationDetails (
 	reservation_cancellation_date datetime
 )
 
--- TODO: Think how to automatically increment pool_id
 CREATE TABLE StudentcardPool (
-	studentcard_pool_id int NOT NULL,
+	reservation_details_id int NOT NULL,
 	studentcard_number int NOT NULL
 )
 
