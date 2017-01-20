@@ -75,6 +75,7 @@ END
 
 -- zmiana ilosci miejsc na warsztatach
 GO
+-- zmieñ limit miejsc : warsztat
 CREATE PROCEDURE NUM_SPOTS_CHANGE (@newNumSpots smallINT, @workshopID INT)
 AS
 BEGIN
