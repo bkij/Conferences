@@ -31,7 +31,38 @@ BEGIN
 		THROW 50001, 'Error - Total amount of attendees from reservation would be greater than spots for the workshop', 16;
 END
 
--- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc na dany warsztat
+GO
+CREATE TRIGGER CONFERENCES_NUM_SPOTS_GTE_RESERVATION_SUM
+ON dbo.ConferenceReservations
+AFTER INSERT AS
+BEGIN
+	DECLARE @totalReservationSpots int;
+	DECLARE @thisReservationSpots int;
+	DECLARE @otherReservationSpots int;
+	DECLARE @conferenceDayID int;
+
+	SELECT @thisReservationSpots = rd.num_spots
+		FROM inserted
+		INNER JOIN ReservationDetails as rd ON inserted.reservation_details_id = rd.reservation_details_id;
+
+	SELECT @conferenceDayID = conference_day_id
+		FROM inserted;
+
+	SELECT @otherReservationSpots = SUM(num_spots)
+		FROM ConferenceReservations AS cr
+		INNER JOIN ReservationDetails AS rd ON cr.reservation_details_id = rd.reservation_details_id
+		WHERE cr.conference_day_id = @conferenceDayID;
+
+	SELECT @totalReservationSpots = num_spots
+		FROM ConferenceDays
+		WHERE conference_day_id = @conferenceDayID;
+	
+	IF @totalReservationSpots < @thisReservationSpots + @otherReservationSpots
+		ROLLBACK TRANSACTION;
+		THROW 50001, 'Error - Total amount of attendees from reservation would be greater than spots for the conference day', 16;
+END
+
+-- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc na d reany warsztat
 GO
 CREATE TRIGGER NUM_SPOTS_LIMIT
 ON dbo.WORKSHOPS
