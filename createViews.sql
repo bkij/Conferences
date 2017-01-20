@@ -106,7 +106,6 @@ where dbo.Companies.company_id = @company_id
 
 
 -- WIDOK : Lista najczêœciej korzystaj¹cych z us³ug firm
-GO 
-CREATE 
+
 
 -- WIDOK : Lista najczêœciej korzystaj¹cych z us³ug klientów
