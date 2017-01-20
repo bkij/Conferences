@@ -1,6 +1,35 @@
 USE Conferences
 
+GO
+CREATE TRIGGER WORKSHOPS_NUM_SPOTS_GTE_RESERVATION_SUM
+ON dbo.WorkshopReservations
+AFTER INSERT AS
+BEGIN
+	DECLARE @totalReservationSpots int;
+	DECLARE @thisReservationSpots int;
+	DECLARE @otherReservationSpots int;
+	DECLARE @workshopID int;
 
+	SELECT @thisReservationSpots = rd.num_spots
+		FROM inserted
+		INNER JOIN ReservationDetails as rd ON inserted.reservation_details_id = rd.reservation_details_id;
+
+	SELECT @workshopID = workshop_id
+		FROM inserted;
+
+	SELECT @otherReservationSpots = SUM(num_spots)
+		FROM WorkshopReservations AS wr
+		INNER JOIN ReservationDetails AS rd ON wr.reservation_details_id = rd.reservation_details_id
+		WHERE wr.workshop_id = @workshopID;
+
+	SELECT @totalReservationSpots = num_spots
+		FROM Workshops
+		WHERE workshop_id = @workshopID;
+	
+	IF @totalReservationSpots < @thisReservationSpots + @otherReservationSpots
+		ROLLBACK TRANSACTION;
+		THROW 50001, 'Error - Total amount of attendees from reservation would be greater than spots for the workshop', 16;
+END
 
 -- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc na dany warsztat
 GO
