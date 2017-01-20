@@ -83,6 +83,7 @@ CREATE TABLE ReservationDetails (
 	studentcard_pool_id int,
 	cost money NOT NULL,
 	num_spots smallint NOT NULL,
+	num_students smallint NOT NULL,
 	reservation_date datetime NOT NULL,
 	reservation_cancellation_date datetime
 )
