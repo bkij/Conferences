@@ -95,6 +95,7 @@ BEGIN
 	IF @numStudents != @numStudentsRes
 		THROW 50001, 'Student count differs from reservation student count', 16;
 	
+	-- Insert new Clients
 	INSERT INTO Clients(firstname, lastname, initial, studentcard_number)
 	SELECT firstname, lastname, initial, studentcard_number FROM @clients;
 
