@@ -1,4 +1,5 @@
 USE CONFERENCES
+GO
 
 CREATE PROCEDURE NUM_SPOTS_CHANGE (@newNumSpots smallINT, @workshopID INT)
 AS
@@ -11,7 +12,7 @@ END
 
 
 -- zmieñ iloœæ miejsc w rezerwacji
-
+GO
 CREATE PROCEDURE NUM_SPOTS_RESERVATION_CHANGE (@newNumSpots smallint, @reservationID int)
 AS 
 BEGIN 
@@ -28,7 +29,7 @@ END
 
 
 -- zmieñ limit miejsc w danym dniu konferencji
-
+GO
 CREATE PROCEDURE NUM_SPOTS_CONFERENCE_DAY (@newNumSpots smallint , @ConferenceDayId INT)
 AS
 BEGIN
@@ -41,7 +42,7 @@ END
 
 
 -- anulowanie rezerwacji : konferencja
-
+GO
 CREATE PROCEDURE RESERVATION_CANCELLATION_CR @ReservationID INT
 AS BEGIN 
 SET NOCOUNT ON;
@@ -55,7 +56,7 @@ END
 
 
 -- anulowanie rezerwacji : warsztaty
-
+GO
 CREATE PROCEDURE RESERVATION_CANCELLATION_WS @ReservationID INT
 AS BEGIN 
 SET NOCOUNT ON;
