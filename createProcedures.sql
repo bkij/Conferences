@@ -1,6 +1,6 @@
 USE CONFERENCES
 GO
-
+-- zmieñ limit miejsc : warsztat
 CREATE PROCEDURE NUM_SPOTS_CHANGE (@newNumSpots smallINT, @workshopID INT)
 AS
 BEGIN
