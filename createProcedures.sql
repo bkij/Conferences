@@ -72,10 +72,39 @@ BEGIN
 
 END
 
+-- podanie listy gosci zwiazanych z rezerwacja
+GO
+CREATE TYPE dbo.ClientInfo AS TABLE
+	(firstname nvarchar(50), lastname nvarchar(50), initial nchar(1), studentcard_number int);
+
+CREATE PROCEDURE ADD_RESERVATION_LIST(@reservationID int, @clients dbo.ClientInfo READONLY)
+AS
+BEGIN
+	DECLARE @numSpotsRes int;
+	DECLARE @numSpots int;
+	DECLARE @numStudentsRes int;
+	DECLARE @numStudents int;
+
+	SELECT @numSpotsRes = num_spots FROM ReservationDetails WHERE reservation_details_id = @reservationID;
+	SELECT @numSpots = COUNT(1) FROM @clients;
+	SELECT @numStudentsRes = num_students FROM ReservationDetails WHERE reservation_details_id = @reservationID;
+	SELECT @numStudents = COUNT(1) from @clients WHERE studentcard_number IS NOT NULL;
+
+	IF @numSpots != @numSpotsRes
+		THROW 50001, 'Client count differs from reservation spot count', 16;
+	IF @numStudents != @numStudentsRes
+		THROW 50001, 'Student count differs from reservation student count', 16;
+	
+	INSERT INTO Clients(firstname, lastname, initial, studentcard_number)
+	SELECT firstname, lastname, initial, studentcard_number FROM @clients;
+
+	INSERT INTO StudentcardPool(reservation_details_id, studentcard_number)
+	SELECT @reservationID, studentcard_number FROM @clients;
+END
+
 
 -- zmiana ilosci miejsc na warsztatach
 GO
--- zmieñ limit miejsc : warsztat
 CREATE PROCEDURE NUM_SPOTS_CHANGE (@newNumSpots smallINT, @workshopID INT)
 AS
 BEGIN
