@@ -164,6 +164,10 @@ ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end_gt_date_start
 	CHECK(date_end >= DATEADD(hh, 12, date_start))
 
+ALTER TABLE Workshops
+	ADD CONSTRAINT ck_date_workshop
+	CHECK(date > GETDATE())
+
 ALTER TABLE Companies
 	ADD CONSTRAINT dflt_company_country
 	DEFAULT 'Polska' FOR country
