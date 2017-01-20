@@ -1,6 +1,7 @@
--- WIDOK: NAJPOPULARNIEJSZE KONFERENCJE - pokazuje listê konferencji najbardziej obleganych
+-- WIDOK: NAJPOPULARNIEJSZE KONFERENCJE - pokazuje listê 10 konferencji najbardziej obleganych
+
 CREATE VIEW [The most popular conferences] AS
-SELECT SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Conferences.conference_id,  dbo.Conferences.title,
+SELECT  TOP 10 SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Conferences.conference_id,  dbo.Conferences.title,
 	dbo.Conferences.date_start, dbo.Conferences.date_end
 FROM dbo.CONFERENCES
 	inner join dbo.conferencereservations 
@@ -14,9 +15,9 @@ order by [The number of takers] desc
 
 
 
--- WIDOK: NAJPOPULARNIEJSZE WARSZTATY - pokazuje listê warsztatów najbardziej obleganych
+-- WIDOK: NAJPOPULARNIEJSZE WARSZTATY - pokazuje listê 10 warsztatów najbardziej obleganych
 CREATE VIEW [The most popular workshops] AS
-SELECT SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Workshops.workshop_id, 
+SELECT TOP 10 SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Workshops.workshop_id, 
 	dbo.Workshops.conference_day_id, dbo.Workshops.title, dbo.Workshops.num_spots, dbo.Workshops.date, dbo.Workshops.price
 FROM dbo.WORKSHOPS
 	inner join dbo.workshopreservations 
@@ -42,4 +43,6 @@ FROM dbo.WorkshopReservations
 	inner join dbo.ReservationDetails 
 		on dbo.WorkshopReservations.reservation_details_id = dbo.ReservationDetails.reservation_details_id
 	where dbo.ReservationDetails.reservation_cancellation_date IS NOT NULL
+
+
 
