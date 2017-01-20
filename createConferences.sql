@@ -166,7 +166,7 @@ ALTER TABLE Conferences
 
 ALTER TABLE Workshops
 	ADD CONSTRAINT ck_date_workshop
-	CHECK(date > GETDATE())
+	CHECK(date >= GETDATE())
 
 ALTER TABLE Companies
 	ADD CONSTRAINT dflt_company_country
