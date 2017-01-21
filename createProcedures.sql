@@ -3,8 +3,8 @@ USE CONFERENCES
 
 
 -- Tworzenie rezerwacji
-GO
 -- entityID - ID konferencji lub warsztatu (w zaleznosci od wartosci isConference)
+GO
 CREATE PROCEDURE CREATE_RESERVATION (@entityID int, @isConference bit, @clientID int, @companyID int, @numSpots int, @numStudents int)
 AS
 BEGIN
@@ -130,8 +130,6 @@ BEGIN
 END
 
 
-
-
 -- zmieñ limit miejsc w danym dniu konferencji
 GO
 CREATE PROCEDURE NUM_SPOTS_CONFERENCE_DAY (@newNumSpots smallint , @ConferenceDayId INT)
@@ -142,8 +140,6 @@ BEGIN
 	SET ConferenceDays.num_spots = @newNumSpots
 	WHERE conferencedays.conference_day_id = @conferenceDayId
 END
-
-
 
 -- anulowanie rezerwacji : konferencja
 GO
@@ -157,7 +153,6 @@ from reservationdetails
 		on reservationdetails.reservation_details_id = conferencereservations.reservation_details_id
 	where conferencereservations.reservation_id = @reservationID
 END
-
 
 -- anulowanie rezerwacji : warsztaty
 GO
