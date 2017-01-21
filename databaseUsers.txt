@@ -19,10 +19,13 @@ Do sprawnego zarz¹dzania stworzonym systemem bazodanowym konieczne jest zdefinio
 				lista p³atnoœci danej firmy (PAYMENTS_LIST_PER_COMPANY)
 				lista klientów najczêœciej korzystaj¹cych z us³ug ([THE LIST OF MOST FREQUENT CLIENTS GETING THE SERVICES])
 				lista firm najczêœciej korystaj¹cych z us³ug ([THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES])
-
-
 ******klient******
-- procedura:	zmiana iloœci miejsc w rezerwacji (NUM_SPOTS_RESERVATION_CHANGE)
+- procedury:	zmiana iloœci miejsc w rezerwacji (NUM_SPOTS_RESERVATION_CHANGE)
 				anulowanie rezerwacji na konferencjê (RESERVATION_CANCELLATION_CR)
 				anulowanie rezerwacji na warsztat (RESERVATION_CANCELLATION_WS)
+				przypisanie uczestnika do konkretnej rezerwacji (ADD_RESERVATION_LIST)
+- widoki:		historia p³atnoœci danego klienta (PAYMENTS_HISTORY)
+- funkcje:		informacja o liczbie wolnych miejsc na warsztat (FREE_SPOTS_FOR_WS)
+				informacja o liczbie wolnych miejsc na dany dzieñ konferencji (FREE_SPOTS_FOR_CONFDAY)
 
+				

@@ -1,5 +1,7 @@
 USE Conferences
 
+
+
 GO
 CREATE TRIGGER WORKSHOPS_NUM_SPOTS_GTE_RESERVATION_SUM
 ON dbo.WorkshopReservations
@@ -30,6 +32,8 @@ BEGIN
 		ROLLBACK TRANSACTION;
 		THROW 50001, 'Error - Total amount of attendees from reservation would be greater than spots for the workshop', 16;
 END
+
+
 
 GO
 CREATE TRIGGER CONFERENCES_NUM_SPOTS_GTE_RESERVATION_SUM
@@ -62,7 +66,9 @@ BEGIN
 		THROW 50001, 'Error - Total amount of attendees from reservation would be greater than spots for the conference day', 16;
 END
 
--- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc na d reany warsztat
+
+
+-- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc na dany warsztat
 GO
 CREATE TRIGGER NUM_SPOTS_LIMIT
 ON dbo.WORKSHOPS
@@ -81,13 +87,10 @@ IF EXISTS (
 		having sum(dbo.reservationdetails.num_spots) > inserted.num_spots
 	)
 BEGIN
-RAISERROR('Changes cannot be made.',16,1)	;
+RAISERROR('The number of spots concerning the workshop cannot be changed since the number of booked spots is higher than implemented value.',16,1)	;
 ROLLBACK TRANSACTION
 END
 END
-
-
-
 
 -- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc w dany dzien konferencji
 
@@ -109,7 +112,7 @@ IF EXISTS (
 		having sum(dbo.reservationdetails.num_spots) > inserted.num_spots
 	)
 BEGIN
-RAISERROR('Changes cannot be made.',16,1)	;
+RAISERROR('The number of spots of conference day cannot be changed since the number of booked spots is higher than implemented value.',16,1)	;
 ROLLBACK TRANSACTION
 END
 END

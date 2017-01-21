@@ -128,3 +128,22 @@ from Clients
 	inner join dbo.ConferenceAttendees on dbo.ConferenceAttendees.client_id = dbo.Clients.client_id
 group by dbo.Clients.client_id, dbo.Clients.firstname, dbo.Clients.lastname
 order by count(dbo.Clients.client_id) desc
+
+
+-- WIDOK: Historia p³atnoœci danego klienta
+GO
+CREATE PROCEDURE PAYMENTS_HISTORY (@clientID int)
+AS 
+SELECT dbo.Payments.payment_id, dbo.Payments.amount_paid, dbo.Payments.date_paid
+from Payments
+	inner join dbo.ReservationDetails
+		on dbo.Payments.payment_id = dbo.ReservationDetails.payment_id
+	inner join dbo.Clients
+		on dbo.ReservationDetails.client_id = dbo.Clients.client_id
+where dbo.Clients.client_id = @clientID
+
+
+
+
+
+
