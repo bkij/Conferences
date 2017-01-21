@@ -105,26 +105,26 @@ SELECT * from dbo.Payments
 where dbo.Companies.company_id = @company_id
 
 
--- WIDOK : Lista najczêœciej korzystaj¹cych z us³ug firm
+-- WIDOK : Lista 20 najczêœciej korzystaj¹cych z us³ug firm
 GO
 CREATE VIEW [THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES] AS
-SELECT TOP 20 dbo.Companies.company_id, dbo.Companies.company_name, count(dbo.Companies.company_id) as 'Frequency'
+SELECT TOP 20 dbo.Companies.company_id, dbo.Companies.company_name
 from Companies 
 	inner join dbo.Clients on
 		dbo.Clients.company_id = dbo.Companies.company_id
 	inner join dbo.ConferenceAttendees on 
 		dbo.ConferenceAttendees.client_id = dbo.Clients.client_id
 GROUP BY dbo.Companies.company_id, dbo.Companies.company_name
-ORDER BY Frequency desc
+ORDER BY count(dbo.Companies.company_id) desc
 
 
 
 
--- WIDOK : Lista najczêœciej korzystaj¹cych z us³ug klientów
+-- WIDOK : Lista 20 najczêœciej korzystaj¹cych z us³ug klientów
 GO
 CREATE VIEW [THE LIST OF MOST FREQUENT CLIENTS GETING THE SERVICES] AS
-SELECT TOP 20 dbo.Clients.client_id, dbo.Clients.firstname, dbo.Clients.lastname, count(dbo.Clients.client_id) as 'Frequency'
+SELECT TOP 20 dbo.Clients.client_id, dbo.Clients.firstname, dbo.Clients.lastname
 from Clients
 	inner join dbo.ConferenceAttendees on dbo.ConferenceAttendees.client_id = dbo.Clients.client_id
 group by dbo.Clients.client_id, dbo.Clients.firstname, dbo.Clients.lastname
-order by Frequency desc
+order by count(dbo.Clients.client_id) desc
