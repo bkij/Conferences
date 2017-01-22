@@ -47,5 +47,41 @@ BEGIN
 END
 
 
+-- FUNKCJA zwracajaca informacje o nieoplaconych rezerwacjach
 
-
+GO
+CREATE FUNCTION dbo.RESERVATION_LIST (@entityId int, @isCompany bit)
+RETURNS @rtnTable TABLE (
+	id int,
+	cost money,
+	num_spots int,
+	num_students int,
+	reservation_date datetime,
+	paid char(1)
+)
+AS
+BEGIN
+	IF @isCompany = 1
+	BEGIN
+		INSERT INTO @rtnTable
+		SELECT rd.reservation_details_id, rd.cost, rd.num_spots, rd.num_students, rd.reservation_date, '1'
+			FROM ReservationDetails as rd
+			WHERE payment_id IS NOT NULL AND rd.company_id = @entityId
+		UNION
+		SELECT rd.reservation_details_id, rd.cost, rd.num_spots, rd.num_students, rd.reservation_date, '0'
+			FROM ReservationDetails as rd
+			WHERE payment_id IS NULL AND rd.company_id = @entityId;
+	END
+	ELSE
+	BEGIN
+		INSERT INTO @rtnTable
+		SELECT rd.reservation_details_id, rd.cost, rd.num_spots, rd.num_students, rd.reservation_date, '1'
+			FROM ReservationDetails as rd
+			WHERE payment_id IS NOT NULL AND rd.client_id = @entityId
+		UNION
+		SELECT rd.reservation_details_id, rd.cost, rd.num_spots, rd.num_students, rd.reservation_date, '0'
+			FROM ReservationDetails as rd
+			WHERE payment_id IS NULL AND rd.client_id = @entityId;
+	END
+	RETURN;
+END
