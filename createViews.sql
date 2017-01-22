@@ -11,7 +11,7 @@ FROM dbo.CONFERENCES
 	inner join dbo.ConferenceDays
 		on dbo.ConferenceDays.conference_id = dbo.Conferences.conference_id
 	inner join dbo.conferencereservations 
-		on dbo.ConferencesDays.conference_day_id = dbo.ConferenceReservations.conference_day_id
+		on dbo.ConferenceDays.conference_day_id = dbo.ConferenceReservations.conference_day_id
 	inner join dbo.reservationdetails 
 		on dbo.reservationdetails.reservation_details_id = dbo.ConferenceReservations.reservation_details_id
 where dbo.reservationdetails.reservation_cancellation_date IS NULL 
@@ -40,7 +40,7 @@ order by [The number of takers] desc
 -- WIDOK: POKA¯ ANULOWANE REZERWACJE 
 GO
 CREATE VIEW [Cancelled Reservations] AS
-SELECT dbo.ConferenceReservations.reservation_id, dbo.ConferenceReservations.conference_id, 'CONFERENCE' as [Conference/Workshop]
+SELECT dbo.ConferenceReservations.reservation_id, dbo.ConferenceReservations.conference_day_id, 'CONFERENCE' as [Conference/Workshop]
 FROM dbo.ConferenceReservations
 	inner join dbo.ReservationDetails 
 		on dbo.ConferenceReservations.reservation_details_id = dbo.ReservationDetails.reservation_details_id
