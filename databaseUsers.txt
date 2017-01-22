@@ -7,13 +7,13 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
 ****** Programista aplikacji do użytku dla organizatorów konferencji ******
 - procedury:	zmiana ilości miejsc na warsztatach, (NUM_SPOTS_WS_CHANGE)
 				zmiana limitu miejsc w danym dniu konferencji (NUM_SPOTS_CONFDAY_CHANGE)
-- widoki:		listy osobowe uczestników konferencji na dany dzień (CONFERENCE_ATTENDEES_PER_DAY)
+                listy osobowe uczestników konferencji na dany dzień (CONFERENCE_ATTENDEES_PER_DAY)
 				listy osobowe uczestników warsztatu na dany dzień (WORKSHOP_ATTENDEES_PER_DAY)
-				lista anulowanych rezerwacji ([Cancelled reservations])
-				najpopularniejsze konferencje ([The most popular conferences])
-				najpopularniejsze warsztaty ([The most popular workshops])
 				lista płatności danego klienta (PAYMENTS_LIST_PER_CLIENT) 
 				lista płatności danej firmy (PAYMENTS_LIST_PER_COMPANY)
+- widoki:		lista anulowanych rezerwacji ([Cancelled reservations])
+				najpopularniejsze konferencje ([The most popular conferences])
+				najpopularniejsze warsztaty ([The most popular workshops])
 				lista klientów najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT CLIENTS GETING THE SERVICES])
 				lista firm najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES])
 ****** Programista aplikacji wewnętrznych wykorzystywanych przez konsulatantów firmy, i zewnętrznych do użytku klientów ******
@@ -21,9 +21,11 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
                 zmiana ilości miejsc w rezerwacji (NUM_SPOTS_RESERVATION_CHANGE)
 				anulowanie rezerwacji na konferencję (RESERVATION_CANCELLATION_CR)
 				anulowanie rezerwacji na warsztat (RESERVATION_CANCELLATION_WS)
-				przypisanie uczestnika do konkretnej rezerwacji (ADD_RESERVATION_LIST)
-- widoki:		historia płatności danego klienta (PAYMENTS_HISTORY)
+				przypisanie uczestników do konkretnej rezerwacji (ADD_RESERVATION_LIST)
+                zaplacenie za rezerwacje (PAY_FOR_RESERVATION)                                                                      
+                historia płatności danego klienta (PAYMENTS_HISTORY)                                                                       
 - funkcje:		informacja o liczbie wolnych miejsc na warsztat (FREE_SPOTS_FOR_WS)
 				informacja o liczbie wolnych miejsc na dany dzień konferencji (FREE_SPOTS_FOR_CONFDAY)
+                lista rezerwacji (RESERVATIONS_LIST)                                                                 
 
 				

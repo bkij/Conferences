@@ -53,61 +53,6 @@ FROM dbo.WorkshopReservations
 	where dbo.ReservationDetails.reservation_cancellation_date IS NOT NULL
 
 
-
-
--- WIDOK (JAKO PROCEDURA): Listy osobowe uczestników konferencji na ka¿dy dzieñ
-GO
-CREATE PROCEDURE CONFERENCE_ATTENDEES_PER_DAY (@ConferenceDayId int) 
-AS
-SELECT dbo.Clients.client_id, dbo.Clients.company_id, dbo.Clients.firstname, dbo.Clients.lastname, dbo.Clients.initial
-from dbo.Clients
-	inner join dbo.ConferenceAttendees
-		on dbo.Clients.client_id = dbo.ConferenceAttendees.client_id
-	inner join dbo.ConferenceDays
-		on dbo.ConferenceDays.conference_day_id = dbo.ConferenceAttendees.conference_day_id 
-where dbo.ConferenceDays.conference_day_id =  @ConferenceDayId
-
--- WIDOK (jako procedura): Listy osobowe uczestników warsztatu na ka¿dy dzieñ
-GO
-CREATE PROCEDURE WORKSHOP_ATTENDEES_PER_DAY (@ConferenceDayId int)
-AS
-SELECT dbo.Clients.client_id, dbo.Clients.company_id, dbo.Clients.firstname, dbo.Clients.lastname, dbo.Clients.initial
-	from dbo.Clients 
-		inner join dbo.WorkshopAttendees
-			on dbo.Clients.client_id = dbo.WorkshopAttendees.client_id
-        inner join  dbo.Workshops
-			on dbo.Workshops.workshop_id = dbo.WorkshopAttendees.workshop_id
-		inner join dbo.ConferenceDays
-			on dbo.ConferenceDays.conference_day_id = dbo.Workshops.conference_day_id
-where dbo.ConferenceDays.conference_day_id =  @ConferenceDayId
-
-
--- WIDOK (jako procedura): Listy p³atnoœci per klient 
-GO
-CREATE PROCEDURE PAYMENTS_LIST_PER_CLIENT (@client_id int)
-AS
-SELECT * from dbo.Payments
-	inner join dbo.ReservationDetails
-		on dbo.ReservationDetails.payment_id = dbo.Payments.payment_id
-	inner join dbo.Clients
-		on dbo.ReservationDetails.client_id = dbo.Clients.client_id
-where dbo.Clients.client_id = @client_id
-
-
--- WIDOK (jako procedura): Listy p³atnoœæ per firma
-     
-
-GO
-CREATE PROCEDURE PAYMENTS_LIST_PER_COMPANY (@company_id int)
-AS
-SELECT * from dbo.Payments
-	inner join dbo.ReservationDetails
-		on dbo.ReservationDetails.payment_id = dbo.Payments.payment_id
-	inner join dbo.Companies
-		on dbo.ReservationDetails.client_id = dbo.Companies.company_id
-where dbo.Companies.company_id = @company_id
-
-
 -- WIDOK : Lista 20 najczêœciej korzystaj¹cych z us³ug firm
 GO
 CREATE VIEW [THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES] AS
@@ -131,20 +76,6 @@ from Clients
 	inner join dbo.ConferenceAttendees on dbo.ConferenceAttendees.client_id = dbo.Clients.client_id
 group by dbo.Clients.client_id, dbo.Clients.firstname, dbo.Clients.lastname
 order by count(dbo.Clients.client_id) desc
-
-
--- WIDOK: Historia p³atnoœci danego klienta
-GO
-CREATE PROCEDURE PAYMENTS_HISTORY (@clientID int)
-AS 
-SELECT dbo.Payments.payment_id, dbo.Payments.amount_paid, dbo.Payments.date_paid
-from Payments
-	inner join dbo.ReservationDetails
-		on dbo.Payments.payment_id = dbo.ReservationDetails.payment_id
-	inner join dbo.Clients
-		on dbo.ReservationDetails.client_id = dbo.Clients.client_id
-where dbo.Clients.client_id = @clientID
-
 
 
 
