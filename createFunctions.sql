@@ -16,7 +16,7 @@ BEGIN
 							inner join dbo.ConferenceReservations on
 								dbo.ConferenceReservations.reservation_details_id = dbo.ReservationDetails.reservation_details_id
 							inner join dbo.ConferenceDays on
-								dbo.ConferenceDays.conference_id = dbo.ConferenceReservations.conference_id
+								dbo.ConferenceDays.conference_day_id = dbo.ConferenceReservations.conference_day_id
 							where dbo.ConferenceDays.conference_day_id = @dayID and dbo.ReservationDetails.reservation_cancellation_date is NULL)
 	RETURN (@totalNum - @takenNum);
 
