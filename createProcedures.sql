@@ -39,7 +39,7 @@ BEGIN
 
 		SELECT @ID = ID FROM @resDetailsID;
 
-		INSERT INTO ConferenceReservations(conference_id, reservation_details_id)
+		INSERT INTO ConferenceReservations(conference_day_id, reservation_details_id)
 			VALUES (@entityID, @ID);
 		
 		END
