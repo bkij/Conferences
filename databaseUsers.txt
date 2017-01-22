@@ -4,22 +4,19 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
 ******administrator******
 - pełen dostęp do bazy
 
-****** Programista aplikacji wewnętrznych (wykorzystywanych przez konsulatantów firmy)  ******
-- procedury:	tworzenie rezerwacji (CREATE_RESERVATION)
-				zmiana ilości miejsc na warsztatach, 
+****** Programista aplikacji do użytku dla organizatorów konferencji ******
+- procedury:	zmiana ilości miejsc na warsztatach, 
 				zmiana limitu miejsc w danym dniu konferencji (NUM_SPOTS_CHANGE,NUM_SPOTS_CONFERENCE_DAY)
-				anulowanie rezerwacji na konferencję (RESERVATION_CANCELLATION_CR)
-				anulowanie rezerwacji na warsztat (RESERVATION_CANCELLATION_WS)	
 - widoki:		listy osobowe uczestników konferencji na dany dzień (CONFERENCE_ATTENDEES_PER_DAY)
 				listy osobowe uczestników warsztatu na dany dzień (WORKSHOP_ATTENDEES_PER_DAY)
 				lista anulowanych rezerwacji ([Cancelled reservations])
 				najpopularniejsze konferencje ([The most popular conferences])
 				najpopularniejsze warsztaty ([The most popular workshops])
 				lista płatności danego klienta (PAYMENTS_LIST_PER_CLIENT) 
-				lista płatnościdanej firmy (PAYMENTS_LIST_PER_COMPANY)
+				lista płatności danej firmy (PAYMENTS_LIST_PER_COMPANY)
 				lista klientów najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT CLIENTS GETING THE SERVICES])
 				lista firm najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES])
-****** Programista aplikacji zewnętrznych (do użytku klientów)******
+****** Programista aplikacji wewnętrznych wykorzystywanych przez konsulatantów firmy, i zewnętrznych do użytku klientów ******
 - procedury:	tworzenie rezerwacji (CREATE_RESERVATION)
                 zmiana ilości miejsc w rezerwacji (NUM_SPOTS_RESERVATION_CHANGE)
 				anulowanie rezerwacji na konferencję (RESERVATION_CANCELLATION_CR)
