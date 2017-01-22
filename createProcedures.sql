@@ -168,7 +168,6 @@ from reservationdetails
 	where workshopreservations.reservation_id = @ReservationID
 END
 
--- TODO: Add payment procedure
 GO
 CREATE PROCEDURE PAY_FOR_RESERVATION (@resId int, @amountPaid money)
 AS 
