@@ -1,14 +1,17 @@
 USE CONFERENCES
 
 
+-- TODO: poprawic ponizszy widok?
 -- WIDOK: NAJPOPULARNIEJSZE KONFERENCJE - pokazuje listê 10 konferencji najbardziej obleganych
 GO
 CREATE VIEW [The most popular conferences] AS
 SELECT  TOP 10 SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Conferences.conference_id,  dbo.Conferences.title,
 	dbo.Conferences.date_start, dbo.Conferences.date_end
 FROM dbo.CONFERENCES
+	inner join dbo.ConferenceDays
+		on dbo.ConferenceDays.conference_id = dbo.Conferences.conference_id
 	inner join dbo.conferencereservations 
-		on dbo.Conferences.conference_id = dbo.ConferenceReservations.conference_id
+		on dbo.ConferencesDays.conference_day_id = dbo.ConferenceReservations.conference_day_id
 	inner join dbo.reservationdetails 
 		on dbo.reservationdetails.reservation_details_id = dbo.ConferenceReservations.reservation_details_id
 where dbo.reservationdetails.reservation_cancellation_date IS NULL 
