@@ -105,9 +105,11 @@ with open('conferenceData.csv', 'w', encoding='utf-16') as confOut, open('confer
                 workshopWriter.writerow([uidWorkshop, uidConfDay, text.title()[:100], random.randint(30, 50), currentDateList[j].strftime("%d.%m.%y") + random.choice(hours), price])
                 
                 uidWorkshop += 1
+        
+        usedDates.update(currentDateList)
 
         
-with open('conferenceAttendees.csv', 'w', encoding='utf-16') as confAttOut:
+with open('conferenceAttendees.csv', 'w', encoding='utf-16') as confAttOut, open('workshopAttendees.csv', 'w', encoding='utf-16') as workshopAttOu:
     # The rows: client_id, conference_day_id
     confAttendeesWriter = csv.writer(confAttOut, delimiter='~')
     for i in range(1, numConfDays + 1):
