@@ -152,6 +152,10 @@ ALTER TABLE ReservationDetails
 	ADD CONSTRAINT fk_reservation_company
 	FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 
+ALTER TABLE StudencardPool
+	ADD CONSTRAINT fk_studentcard_reservation
+	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
+
 -- Constraints
 
 ALTER TABLE Conferences
