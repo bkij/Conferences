@@ -17,6 +17,9 @@ DEFAULT_LANGUAGE = Polish,
 CHECK_EXPIRATION = OFF,
 CHECK_POLICY = OFF;
 
+USE Conferences
+GO
+
 -- Programista aplikacji wewnętrznych, do użytku
 -- przez organizatorów konferencji (zarządzanie konferencjami i analiza danych)
 IF EXISTS(SELECT * FROM sys.database_principals WHERE name = 'innerDeveloper')
@@ -53,8 +56,8 @@ GRANT EXEC ON Conferences.dbo.RESERVATION_CANCELLATION_WS TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.ADD_RESERVATION_LIST TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.PAY_FOR_RESERVATION TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.PAYMENTS_HISTORY TO appDeveloper;
-GRANT EXEC ON Conferences.dbo.RESERVATION_LIST TO appDeveloper;
 
 -- Funkcje
+GRANT SELECT ON Conferences.dbo.RESERVATION_LIST TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.FREE_SPOTS_FOR_WS TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.FREE_SPOTS_FOR_CONFDAY TO appDeveloper;
