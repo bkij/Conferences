@@ -2,23 +2,23 @@ import csv
 import elizabeth as el
 import random
 from itertools import groupby
-
+from datetime import datetime
+from datetime import timedelta
 
 personal = el.Personal('pl')
 business = el.Business('pl')
 address = el.Address('pl')
-datetime = el.Datetime('pl')
+elDatetime = el.Datetime('pl')
 text = el.Text('pl')
 num = el.Numbers()
 
 daysByMonth = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
 
-datesUsed = set()
-dateRanges = []
+usedDates = set()
 numConfDays = 0
 attendByConfDay = dict()
 attendByWorkshop = dict()
-workshopsByConfDay = dict()
+workshopsByConfDay = defaultdict()
 companiesByAttendee = dict()
 confReserves = []
 workshopReserves = []
@@ -26,46 +26,6 @@ priceByConfDay = {}
 priceByWorkshop = {}
 costByReserv = {}
 dateByReserv = {}
-
-def getEndDate(date):
-    day = int(date[:2])
-    day += random.randint(1,2)
-    month = int(date[3:5])
-    year = int(date[6:])
-    if day > daysByMonth[month]:
-        day = day % daysByMonth[month]
-        month += 1
-        if month > 12:
-            month = month % 12
-            year += 1
-    day = str(day)
-    if len(day) < 2:
-        day = '0' + day
-    month = str(month)
-    if len(month) < 2:
-        month = '0' + month
-    year = str(year)
-    return day + '.' + month + '.' + year
-
-def incDate(date):
-    day = int(date[:2])
-    day += 1
-    month = int(date[3:5])
-    year = int(date[6:])
-    if day > daysByMonth[month]:
-        day = day % daysByMonth[month]
-        month += 1
-        if month > 12:
-            month = month % 12
-            year += 1
-    day = str(day)
-    if len(day) < 2:
-        day = '0' + day
-    month = str(month)
-    if len(month) < 2:
-        month = '0' + month
-    year = str(year)
-    return day + '.' + month + '.' + year
     
 def chunked(lst, chunkSize):
     newLst = []
@@ -97,45 +57,52 @@ with open('companyData.csv', 'w', encoding='utf-16') as companyOut:
                                 address.city(), address.country(), address.postal_code()])
                                 
                                 
-with open('conferenceData.csv', 'w', encoding='utf-16') as confOut:
-    # The rows are: conference_id date_start, date_end, name, price
+with open('conferenceData.csv', 'w', encoding='utf-16') as confOut, open('conferenceDaysData.csv', 'w', encoding='utf-16') as confDaysOut, open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
+    # The conference rows are: conference_id date_start, date_end, name, price
+    # The workshops rows are: wokrshop_id, conference_day_id, title, num_spots, date, price
+    # The conference day rows are: conference_day_id, conference_id, date, num_spots, price
     confWriter = csv.writer(confOut, delimiter='~')
+    confDayWriter = csv.writer(confDaysOur, delimiter='~')
+    workshopWriter = csv.writer(workshopsOut, delimiter='~')
+    
+    uidConfDay = 1
+    uidWorkshop = 1
+    
+    hours = [' 10:00', ' 14:00', ' 16:00', ' 18:00']
+    
     for i in range(72):
-        randDateStart = datetime.date(start = 2010, end = 2013)
-        randDateEnd = getEndDate(randDateStart)
-        currDate = randDateStart
-        breakOuter = False
-        while currDate != incDate(randDateEnd):
-            if currDate in datesUsed:
-                breakOuter = True
-            currDate = incDate(currDate)
-        if breakOuter:
-            break
-        dateRanges.append([randDateStart, randDateEnd])
-        confWriter.writerow([i + 1, randDateStart, randDateEnd, text.title()[:100]])
-        used = randDateStart
-        while used != randDateEnd:
-            datesUsed.add(used)
-            used = incDate(used)
-        datesUsed.add(randDateEnd)
-                                
-with open('conferenceDaysData.csv', 'w', encoding='utf-16') as confDaysOut:
-    # The rows are: conference_day_id, conference_id, date, num_spots
-    confDayWriter = csv.writer(confDaysOut, delimiter='~')
-    i = 1
-    for idx, dates in enumerate(dateRanges):
-        confDayDate = dates[0]
-        while confDayDate != dates[1]:
+        confDuration = random.randint(1,3)
+        randDateStart = datetime.srptime(elDatetime.date(start = 2010, end = 2013), "%d.%m.%y"))
+        currentDateList = [randDateStart + datetime.timedelta(days=x) for x in range(0, confDuration)]
+        
+        # Break the outer loop if any of our dates is already used
+        for date in currentDateList:
+            if date in usedDates:
+                break
+        else:
+            continue
+                   
+        confWriter.writerow([i + 1, currentDateList[0].strftime("%d.%m.%y"), currentDateList[-1].strftime("%d.%m.%y"), text.title()[:100]])
+        
+        # Write conference day info data
+        for j in range(confDuration):
             price = business.price()[:-2]
-            priceByConfDay[i] = price
-            confDayWriter.writerow([i, idx + 1, confDayDate, random.randint(190, 210), price])
-            confDayDate = incDate(confDayDate)
-            i += 1
-        price = business.price()[:-2]
-        priceByConfDay[i] = price
-        confDayWriter.writerow([i, idx + 1, confDayDate, random.randint(190, 210), price])
-        i += 1
-    numConfDays = i
+            priceByConfDay[uid] = price
+            confDayWriter.writerow([uidConfDay, i, currentDateList[j].strftime("%d.%m.%y"), random.randint(190, 210), price])
+            uidConfDay += 1
+            numConfDays += 1
+            
+             # Create workshops for current conference day
+            workshopCnt = random.randint(1,4)
+            for k in range(workshopCnt):
+                price = business.price()[:-2]
+                priceByWorkshop[uidWorkshop] = price
+                workshopsByConfDay[uidConfDay].append(uidWorkshop)
+                
+                workshopWriter.writerow([uidWorkshop, uidConfDay, text.title()[:100], random.randint(30, 50), currentDateList[j].strftime("%d.%m.%y") + random.choice(hours), price])
+                
+                uidWorkshop += 1
+
         
 with open('conferenceAttendees.csv', 'w', encoding='utf-16') as confAttOut:
     # The rows: client_id, conference_day_id
@@ -150,33 +117,6 @@ with open('conferenceAttendees.csv', 'w', encoding='utf-16') as confAttOut:
             attId = attendeeIdSet.pop()
             attendByConfDay[i].append(attId)
             confAttendeesWriter.writerow([attId, i])
-            
-        
-with open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
-    # The rows are: wokrshop_id, conference_day_id, title, num_spots, date, price
-    workshopWriter = csv.writer(workshopsOut, delimiter='~')
-    hours = [' 10:00', ' 14:00', ' 16:00', ' 18:00']
-    idx = 1
-    confDayIdx = 1
-    for dates in dateRanges:
-        workshopDate = dates[0]
-        while workshopDate != dates[1]:
-            workshopsByConfDay[confDayIdx] = []
-            for i in range(random.randint(3,5)):
-                price = business.price()[:-2]
-                priceByWorkshop[idx] = price
-                workshopWriter.writerow([idx, confDayIdx ,text.title()[:100], random.randint(30, 50), workshopDate + random.choice(hours), price])
-                workshopsByConfDay[confDayIdx].append(idx)
-                idx += 1
-            workshopDate = incDate(workshopDate)
-            confDayIdx += 1
-        workshopsByConfDay[confDayIdx] = []
-        for i in range(3):
-            price = business.price()[:-2]
-            priceByWorkshop[idx] = price
-            workshopWriter.writerow([idx, confDayIdx, text.title()[:100], random.randint(30, 50), workshopDate + random.choice(hours), price])
-            idx += 1
-            workshopsByConfDay[confDayIdx].append(idx)
 
 with open('workshopAttendees.csv', 'w', encoding='utf-16') as workshopAttOut:
     # Rows: client_id, workshop_id
@@ -211,7 +151,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut:
                 break
             cost = len(attList) * (1 - 0.85) * float(priceByConfDay[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009)
+            date = elDatetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
             resDetailsWriter.writerow([i, ' ', company, i, ' ', cost, len(attList), date, ' '])
             confReserves.append([idx, i])
@@ -221,7 +161,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut:
                 break
             cost = (1 - 0.85) * float(priceByConfDay[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009)
+            date = elDatetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
             resDetailsWriter.writerow([i, att, ' ', i, ' ', cost, 1, date, ' '])
             confReserves.append([idx, i])
@@ -240,7 +180,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut:
                 break
             cost = len(attList) * (1 - 0.85) * float(priceByWorkshop[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009)
+            date = elDatetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
             resDetailsWriter.writerow([i, ' ', company, i, ' ', cost, len(attList), date, ' '])
             workshopReserves.append([idx, i])
@@ -250,7 +190,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut:
                 break
             cost = (1 - 0.85) * float(priceByWorkshop[idx])
             costByReserv[i] = cost
-            date = datetime.date(start = 2008, end = 2009)
+            date = elDatetime.date(start = 2008, end = 2009)
             dateByReserv[i] = date
             resDetailsWriter.writerow([i, att, ' ', i, ' ', cost, 1, date, ' '])
             workshopReserves.append([idx, i])
