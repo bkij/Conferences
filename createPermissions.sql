@@ -4,7 +4,7 @@ GO
 IF EXISTS(SELECT * FROM master..syslogins WHERE name = 'innerDev')
 DROP LOGIN innerDev
 CREATE LOGIN innerDev WITH PASSWORD = 'password',
-DEFAULT_DATABASE = Conferences,
+DEFAULT_DATABASE = [Conferences],
 DEFAULT_LANGUAGE = Polish,
 CHECK_EXPIRATION = OFF,
 CHECK_POLICY = OFF;
@@ -12,13 +12,15 @@ CHECK_POLICY = OFF;
 IF EXISTS(SELECT * FROM master..syslogins WHERE name = 'appDev')
 DROP LOGIN appDev
 CREATE LOGIN appDev WITH PASSWORD = 'password',
-DEFAULT_DATABASE = Conferences,
+DEFAULT_DATABASE = [Conferences],
 DEFAULT_LANGUAGE = Polish,
 CHECK_EXPIRATION = OFF,
 CHECK_POLICY = OFF;
 
 -- Programista aplikacji wewnętrznych, do użytku
 -- przez organizatorów konferencji (zarządzanie konferencjami i analiza danych)
+IF EXISTS(SELECT * FROM sys.database_principals WHERE name = 'innerDeveloper')
+DROP USER innerDeveloper
 CREATE USER innerDeveloper FOR LOGIN innerDev;
 
 -- Procedury
@@ -39,6 +41,8 @@ GRANT SELECT ON Conferences.dbo.[THE LIST OF MOST FREQUENT COMPANIES GETTING THE
 -- Programista aplikacji do zewnętrznych i wewnętrznych
 -- do użytku klientów (aplikacje webowe, mobilne) oraz konsulatntów
 -- firmy (aplikacje wewnętrzne)
+IF EXISTS(SELECT * FROM sys.database_principals WHERE name = 'appDeveloper')
+DROP USER appDeveloper
 CREATE USER appDeveloper FOR LOGIN appDev;
 
 -- Procdeury
