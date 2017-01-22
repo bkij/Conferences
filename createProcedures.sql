@@ -107,7 +107,7 @@ END
 
 -- zmiana ilosci miejsc na warsztatach
 GO
-CREATE PROCEDURE NUM_SPOTS_CHANGE (@newNumSpots smallINT, @workshopID INT)
+CREATE PROCEDURE NUM_SPOTS_WS_CHANGE (@newNumSpots smallINT, @workshopID INT)
 AS
 BEGIN
 	SET NOCOUNT ON ;
@@ -133,7 +133,7 @@ END
 
 -- zmieñ limit miejsc w danym dniu konferencji
 GO
-CREATE PROCEDURE NUM_SPOTS_CONFERENCE_DAY (@newNumSpots smallint , @ConferenceDayId INT)
+CREATE PROCEDURE NUM_SPOTS_CONFDAY_CHANGE (@newNumSpots smallint , @ConferenceDayId INT)
 AS
 BEGIN
 	SET NOCOUNT ON;

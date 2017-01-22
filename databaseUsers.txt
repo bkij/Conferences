@@ -5,8 +5,8 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
 - pełen dostęp do bazy
 
 ****** Programista aplikacji do użytku dla organizatorów konferencji ******
-- procedury:	zmiana ilości miejsc na warsztatach, 
-				zmiana limitu miejsc w danym dniu konferencji (NUM_SPOTS_CHANGE,NUM_SPOTS_CONFERENCE_DAY)
+- procedury:	zmiana ilości miejsc na warsztatach, (NUM_SPOTS_WS_CHANGE)
+				zmiana limitu miejsc w danym dniu konferencji (NUM_SPOTS_CONFDAY_CHANGE)
 - widoki:		listy osobowe uczestników konferencji na dany dzień (CONFERENCE_ATTENDEES_PER_DAY)
 				listy osobowe uczestników warsztatu na dany dzień (WORKSHOP_ATTENDEES_PER_DAY)
 				lista anulowanych rezerwacji ([Cancelled reservations])
