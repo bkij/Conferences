@@ -94,6 +94,7 @@ END
 
 -- Trigger: sprawdza, czy nie zostanie przekroczony limit miejsc po zmniejszeniu liczby miejsc w dany dzien konferencji
 
+
 GO
 CREATE TRIGGER NUM_SPOTS_LIMIT_CF
 ON dbo.ConferenceDays
@@ -102,10 +103,8 @@ BEGIN
 IF EXISTS (
 	select 'exists'
 		from inserted 
-		inner join dbo.ConferenceDays on 
-			dbo.ConferenceDays.conference_day_id = inserted.conference_day_id
 		inner join dbo.ConferenceReservations on
-			dbo.ConferenceReservations.conference_id = dbo.ConferenceDays.conference_id
+			dbo.ConferenceReservations.conference_day_id = inserted.conference_day_id
 		inner join dbo.ReservationDetails on
 			dbo.ReservationDetails.reservation_details_id = dbo.ConferenceReservations.reservation_details_id
 		group by dbo.ConferenceReservations.conference_id, inserted.num_spots 
