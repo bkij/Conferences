@@ -77,6 +77,7 @@ GO
 CREATE TYPE dbo.ClientInfo AS TABLE
 	(firstname nvarchar(50), lastname nvarchar(50), initial nchar(1), studentcard_number int);
 
+GO
 CREATE PROCEDURE ADD_RESERVATION_LIST(@reservationID int, @clients dbo.ClientInfo READONLY)
 AS
 BEGIN
