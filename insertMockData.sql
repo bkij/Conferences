@@ -1,5 +1,6 @@
 USE Conferences
 
+--TODO: Some kind of error here, investigate
 SET DATEFORMAT dmy
 
 BULK INSERT Clients 
