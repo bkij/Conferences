@@ -16,10 +16,12 @@ daysByMonth = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:3
 
 usedDates = set()
 numConfDays = 0
+workshopsByConfDay = defaultdict()
+attendeesByCompany = defaultdict()
+studentcardByAttendee = defaultdict()
+
 attendByConfDay = dict()
 attendByWorkshop = dict()
-workshopsByConfDay = defaultdict()
-companiesByAttendee = dict()
 confReserves = []
 workshopReserves = []
 priceByConfDay = {}
@@ -35,6 +37,9 @@ def chunked(lst, chunkSize):
 
 def randCompanyOrNull():
     return random.choice([random.randint(1,250), ' '])
+
+def randSCNumberOrNull():
+    return random.choice([random.randint(100000, 999999)])
     
 with open('clientData.csv', 'w', encoding='utf-16') as clientOut:
     # The rows are: client_id, company_id, studentcard_number, firstname, lastname, initial
@@ -43,18 +48,16 @@ with open('clientData.csv', 'w', encoding='utf-16') as clientOut:
         randGender = random.choice(['male', 'female'])
         randInitial = random.choice(text.alphabet()).upper()
         companyId = randCompanyOrNull()
-        clientWriter.writerow([i + 1, companyId, ' ',
-                               personal.name(gender = randGender), personal.surname(), randInitial])
-        if companyId is not None: 
-            companiesByAttendee[i + 1] = companyId
-            
-        
+        studentcard_number = randSCNumberOrNull()
+        clientWriter.writerow([i + 1, companyId, studentcard_number, personal.name(gender = randGender), personal.surname(), randInitial])
+        attendeesByCompany[companyId].append(i + 1)
+        studentcardByAttendee[i + 1] = studentcard_number
+
 with open('companyData.csv', 'w', encoding='utf-16') as companyOut:
     # The rows are: company_id, companyname, address, city, country, zipcode
     companyWriter = csv.writer(companyOut, delimiter='~')
     for i in range(250):
-        companyWriter.writerow([i + 1, business.company(), address.street_name() + ' ' + address.street_number(),
-                                address.city(), address.country(), address.postal_code()])
+        companyWriter.writerow([i + 1, business.company(), address.street_name() + ' ' + address.street_number(), address.city(), address.country(), address.postal_code()])
                                 
                                 
 with open('conferenceData.csv', 'w', encoding='utf-16') as confOut, open('conferenceDaysData.csv', 'w', encoding='utf-16') as confDaysOut, open('workshops.csv', 'w', encoding='utf-16') as workshopsOut:
