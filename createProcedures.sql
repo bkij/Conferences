@@ -2,76 +2,75 @@ USE CONFERENCES
 
 
 
--- TODO: Poprawic ponizsza procedure
 -- Tworzenie rezerwacji
--- entityID - ID konferencji lub warsztatu (w zaleznosci od wartosci isConference)
---GO
---CREATE PROCEDURE CREATE_RESERVATION (@entityID int, @isConference bit, @clientID int, @companyID int, @numSpots int, @numStudents int)
---AS
---BEGIN
---	SET NOCOUNT ON;
+-- entityID - ID dnia konferencji lub warsztatu (w zaleznosci od wartosci isConference)
+GO
+CREATE PROCEDURE CREATE_RESERVATION (@entityID int, @isConferenceDay bit, @clientID int, @companyID int, @numSpots int, @numStudents int)
+AS
+BEGIN
+	SET NOCOUNT ON;
 	
---	DECLARE @entityPrice money;
---	DECLARE @entityDate date;
---	DECLARE @cost money;
---	DECLARE @discount float;
---	DECLARE @resDetailsID table(ID int);
---	DECLARE @ID int;
+	DECLARE @entityPrice money;
+	DECLARE @entityDate date;
+	DECLARE @cost money;
+	DECLARE @discount float;
+	DECLARE @resDetailsID table(ID int);
+	DECLARE @ID int;
 
---	IF @isConference = 1
---		BEGIN
+	IF @isConferenceDay = 1
+		BEGIN
 		
---		SELECT @entityPrice = confDay.price, @entityDate = confDay.date
---		FROM ConferenceDays AS confDay
---		WHERE confDay.conference_day_id = @entityID;
+		SELECT @entityPrice = confDay.price, @entityDate = confDay.date
+		FROM ConferenceDays AS confDay
+		WHERE confDay.conference_day_id = @entityID;
 
---		IF DATEADD(month, 3, GETDATE()) < @entityDate
---			SET @discount = 0.15
---		ELSE IF DATEADD(month, 2, GETDATE()) < @entityDate
---			SET @discount = 0.10
---		ELSE IF DATEADD(month, 1, GETDATE()) < @entityDate
---			SET @discount = 0.05
+		IF DATEADD(month, 3, GETDATE()) < @entityDate
+			SET @discount = 0.15
+		ELSE IF DATEADD(month, 2, GETDATE()) < @entityDate
+			SET @discount = 0.10
+		ELSE IF DATEADD(month, 1, GETDATE()) < @entityDate
+			SET @discount = 0.05
 
---		SET @cost = (1 - @discount) * ( @entityPrice * (@numSpots - @numStudents) + @entityPrice * 0.9 * @numStudents);
+		SET @cost = (1 - @discount) * ( @entityPrice * (@numSpots - @numStudents) + @entityPrice * 0.9 * @numStudents);
 
---		INSERT INTO ReservationDetails (client_id, company_id, num_spots, num_students, cost, reservation_date)
---		OUTPUT INSERTED.reservation_details_id INTO @resDetailsID(ID)
---			VALUES (@clientID, @companyID, @numSpots, @numStudents, @cost, GETDATE());
+		INSERT INTO ReservationDetails (client_id, company_id, num_spots, num_students, cost, reservation_date)
+		OUTPUT INSERTED.reservation_details_id INTO @resDetailsID(ID)
+			VALUES (@clientID, @companyID, @numSpots, @numStudents, @cost, GETDATE());
 
---		SELECT @ID = ID FROM @resDetailsID;
+		SELECT @ID = ID FROM @resDetailsID;
 
---		INSERT INTO ConferenceReservations(conference_id, reservation_details_id)
---			VALUES (@entityID, @ID);
+		INSERT INTO ConferenceReservations(conference_id, reservation_details_id)
+			VALUES (@entityID, @ID);
 		
---		END
---	ELSE
---		BEGIN
+		END
+	ELSE
+		BEGIN
 
---		SELECT @entityPrice = w.price, @entityDate = w.date
---		FROM Workshops AS w
---		WHERE w.workshop_id = @entityID;
+		SELECT @entityPrice = w.price, @entityDate = w.date
+		FROM Workshops AS w
+		WHERE w.workshop_id = @entityID;
 
---		IF DATEADD(month, 3, GETDATE()) < @entityDate
---			SET @discount = 0.15
---		ELSE IF DATEADD(month, 2, GETDATE()) < @entityDate
---			SET @discount = 0.10
---		ELSE IF DATEADD(month, 1, GETDATE()) < @entityDate
---			SET @discount = 0.05
+		IF DATEADD(month, 3, GETDATE()) < @entityDate
+			SET @discount = 0.15
+		ELSE IF DATEADD(month, 2, GETDATE()) < @entityDate
+			SET @discount = 0.10
+		ELSE IF DATEADD(month, 1, GETDATE()) < @entityDate
+			SET @discount = 0.05
 
---		SET @cost = (1 - @discount) * ( @entityPrice * (@numSpots - @numStudents) + @entityPrice * 0.9 * @numStudents);
+		SET @cost = (1 - @discount) * ( @entityPrice * (@numSpots - @numStudents) + @entityPrice * 0.9 * @numStudents);
 
---		INSERT INTO ReservationDetails (client_id, company_id, num_spots, num_students, cost, reservation_date)
---		OUTPUT INSERTED.reservation_details_id INTO @resDetailsID(ID)
---			VALUES (@clientID, @companyID, @numSpots, @numStudents, @cost, GETDATE());
+		INSERT INTO ReservationDetails (client_id, company_id, num_spots, num_students, cost, reservation_date)
+		OUTPUT INSERTED.reservation_details_id INTO @resDetailsID(ID)
+			VALUES (@clientID, @companyID, @numSpots, @numStudents, @cost, GETDATE());
 
---		SELECT @ID = ID FROM @resDetailsID;
+		SELECT @ID = ID FROM @resDetailsID;
 
---		INSERT INTO WorkshopReservations(workshop_id, reservation_details_id)
---			VALUES (@entityID, @ID);
+		INSERT INTO WorkshopReservations(workshop_id, reservation_details_id)
+			VALUES (@entityID, @ID);
 
---		END
+		END
 
---END
+END
 
 -- podanie listy gosci zwiazanych z rezerwacja
 GO
@@ -174,6 +173,7 @@ GO
 CREATE PROCEDURE PAY_FOR_RESERVATION (@resId int, @amountPaid money)
 AS 
 BEGIN
+	SET NOCOUNT ON;
 	DECLARE @paymentID int;
 	DECLARE	@ID table(ID int)
 
