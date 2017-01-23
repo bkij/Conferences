@@ -194,7 +194,9 @@ AFTER INSERT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	IF NOT ( SELECT inserted.date FROM inserted ) = (SELECT cd.date FROM ConferenceDays cd INNER JOIN inserted i ON cd.conference_day_id = i.conference_day_id)
+	IF NOT ( SELECT YEAR(inserted.date) FROM inserted ) = (SELECT YEAR(cd.date) FROM ConferenceDays cd INNER JOIN inserted i ON cd.conference_day_id = i.conference_day_id)
+	AND ( SELECT MONTH(inserted.date) FROM inserted ) = (SELECT MONTH(cd.date) FROM ConferenceDays cd INNER JOIN inserted i ON cd.conference_day_id = i.conference_day_id)
+	AND ( SELECT DAY(inserted.date) FROM inserted ) = (SELECT DAY(cd.date) FROM ConferenceDays cd INNER JOIN inserted i ON cd.conference_day_id = i.conference_day_id)
 	BEGIN
 		ROLLBACK TRANSACTION;
 		THROW 50001, 'Error - invalid conference day date', 16;
