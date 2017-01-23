@@ -152,6 +152,9 @@ ALTER TABLE ReservationDetails
 ALTER TABLE StudentcardPool
 	ADD CONSTRAINT fk_studentcard_reservation
 	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
+ALTER TABLE StudentcardPool
+	ADD CONSTRAINT fk_studentcard_client
+	FOREIGN KEY (studentcard_number) REFERENCES Clients(studentcard_number)
 
 -- Constraints
 
