@@ -92,8 +92,8 @@ CREATE TABLE StudentcardPool (
 
 CREATE TABLE Payments (
 	payment_id int PRIMARY KEY IDENTITY(1,1),
-	date_paid datetime,
-	amount_paid money
+	date_paid datetime NOT NULL,
+	amount_paid money NOT NULL
 )
 
 -- TODO: If time allows: Think about cancelling conferences/days with CASCADES and stuff
