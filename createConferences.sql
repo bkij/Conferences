@@ -12,7 +12,7 @@ GO
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
 	company_id int,
-	studentcard_number int UNIQUE,
+	studentcard_number int,
 	firstname nvarchar(50) NOT NULL,
 	lastname nvarchar(50) NOT NULL,
 	initial nchar(1),
@@ -45,11 +45,13 @@ CREATE TABLE ConferenceDays (
 CREATE TABLE ConferenceAttendees (
 	client_id int NOT NULL,
 	conference_day_id int NOT NULL
+	PRIMARY KEY (client_id, conference_day_id)
 )
 
 CREATE TABLE WorkshopAttendees (
 	client_id int NOT NULL,
 	workshop_id int NOT NULL
+	PRIMARY KEY (client_id, workshop_id)
 )
 
 CREATE TABLE Workshops (
