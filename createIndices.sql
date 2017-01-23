@@ -18,7 +18,5 @@ ON CLIENTS (company_id)
 CREATE INDEX WorkshopId_INDEX
 ON WORKSHOPATTENDEES (workshop_id)
 
-CREATE INDEX WorkshopReservationID_INDEX
-ON WORKSHOPRESERVATIONS (workshop_id, reservation_id)
 
 
