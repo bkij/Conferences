@@ -39,7 +39,7 @@ CREATE TABLE ConferenceDays (
 	conference_id int NOT NULL,
 	date datetime UNIQUE NOT NULL,
 	num_spots smallint NOT NULL,
-	price money
+	price money NOT NULL
 )
 
 CREATE TABLE ConferenceAttendees (
