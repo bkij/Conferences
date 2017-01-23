@@ -13,7 +13,7 @@ GO
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
 	company_id int,
-	studentcard_number int,
+	studentcard_number int UNIQUE,
 	firstname nvarchar(50) NOT NULL,
 	lastname nvarchar(50) NOT NULL,
 	initial nchar(1),
@@ -30,8 +30,8 @@ CREATE TABLE Companies (
 
 CREATE TABLE Conferences (
 	conference_id int PRIMARY KEY IDENTITY(1,1),
-	date_start datetime NOT NULL,
-	date_end datetime NOT NULL,
+	date_start datetime NOT NULL UNIQUE,
+	date_end datetime NOT NULL UNIQUE,
 	title nvarchar(100) NOT NULL,
 )
 

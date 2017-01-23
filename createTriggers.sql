@@ -170,3 +170,33 @@ BEGIN
 		THROW 50001, 'Error - cannot reserve two workshops sharing a time slot', 16;
 	END
 END
+
+-- Trigger: przy dodawaniu dnia konferencji daty muszo się zgadzać
+GO
+CREATE TRIGGER CHECK_DATE_COMPATIBILITY_CONF_CONF_DAY
+ON dbo.ConferenceDays
+AFTER INSERT AS
+BEGIN
+	SET NOCOUNT ON;
+	IF NOT ( SELECT inserted.date FROM inserted ) BETWEEN (SELECT c.date_start FROM Conferences c INNER JOIN inserted i ON c.conference_id = i.conference_id)
+												  AND     (SELECT c.date_end FROM Conferences c INNER JOIN inserted i ON c.conference_id = i.conference_id)
+	BEGIN
+		ROLLBACK TRANSACTION;
+		THROW 50001, 'Error - invalid conference day date', 16;
+	END
+END
+
+-- Triger: przy dodoawaniu warsztatu daty muszą się zgadzać
+GO
+CREATE TRIGGER CHECK_DATE_COMPAT_CONF_DAY_WSHOP
+ON dbo.Workshops
+AFTER INSERT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF NOT ( SELECT inserted.date FROM inserted ) = (SELECT cd.date FROM ConferenceDays cd INNER JOIN inserted i ON cd.conference_day_id = i.conference_day_id)
+	BEGIN
+		ROLLBACK TRANSACTION;
+		THROW 50001, 'Error - invalid conference day date', 16;
+	END
+END
