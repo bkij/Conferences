@@ -31,7 +31,7 @@ CREATE TABLE Conferences (
 	conference_id int PRIMARY KEY IDENTITY(1,1),
 	date_start datetime NOT NULL UNIQUE,
 	date_end datetime NOT NULL UNIQUE,
-	title nvarchar(100) NOT NULL,
+	title nvarchar(100) NOT NULL
 )
 
 CREATE TABLE ConferenceDays (
