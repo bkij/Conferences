@@ -9,6 +9,7 @@ DEFAULT_LANGUAGE = Polish,
 CHECK_EXPIRATION = OFF,
 CHECK_POLICY = OFF;
 
+GO
 IF EXISTS(SELECT * FROM master..syslogins WHERE name = 'appDev')
 DROP LOGIN appDev
 CREATE LOGIN appDev WITH PASSWORD = 'password',

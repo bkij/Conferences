@@ -127,7 +127,7 @@ BEGIN
 		FROM ReservationDetails
 	 inner JOIN ConferenceReservations 
 		ON ConferenceReservations.reservation_details_id = ReservationDetails.reservation_details_id
-	WHERE conferencereservations.reservation_id = @reservationID
+	WHERE conferencereservations.reservation_details_id = @reservationID
 END
 
 
@@ -152,7 +152,7 @@ SET RESERVATIONDETAILS.RESERVATION_CANCELLATION_DATE = GETDATE()
 from reservationdetails 
 	inner join conferencereservations 
 		on reservationdetails.reservation_details_id = conferencereservations.reservation_details_id
-	where conferencereservations.reservation_id = @reservationID
+	where conferencereservations.reservation_details_id = @reservationID
 END
 
 -- anulowanie rezerwacji : warsztaty
@@ -165,7 +165,7 @@ SET RESERVATIONDETAILS.RESERVATION_Cancellation_Date = GETDATE()
 from reservationdetails 
 	inner join workshopreservations 
 		on reservationdetails.reservation_details_id = workshopreservations.reservation_details_id
-	where workshopreservations.reservation_id = @ReservationID
+	where workshopreservations.reservation_details_id = @ReservationID
 END
 
 -- Opłacenie rezerwacji

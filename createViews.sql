@@ -40,13 +40,13 @@ order by [The number of takers] desc
 -- WIDOK: POKA¯ ANULOWANE REZERWACJE 
 GO
 CREATE VIEW [Cancelled Reservations] AS
-SELECT dbo.ConferenceReservations.reservation_id, dbo.ConferenceReservations.conference_day_id, 'CONFERENCE' as [Conference/Workshop]
+SELECT dbo.ConferenceReservations.reservation_details_id, dbo.ConferenceReservations.conference_day_id, 'CONFERENCE' as [Conference/Workshop]
 FROM dbo.ConferenceReservations
 	inner join dbo.ReservationDetails 
 		on dbo.ConferenceReservations.reservation_details_id = dbo.ReservationDetails.reservation_details_id
 	where dbo.ReservationDetails.reservation_cancellation_date IS NOT NULL
 UNION
-SELECT dbo.WorkshopReservations.reservation_id, dbo.WorkshopReservations.workshop_id, 'WORKSHOP' as [Conference/Workshop]
+SELECT dbo.WorkshopReservations.reservation_details_id, dbo.WorkshopReservations.workshop_id, 'WORKSHOP' as [Conference/Workshop]
 FROM dbo.WorkshopReservations
 	inner join dbo.ReservationDetails 
 		on dbo.WorkshopReservations.reservation_details_id = dbo.ReservationDetails.reservation_details_id

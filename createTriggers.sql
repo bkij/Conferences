@@ -83,7 +83,7 @@ IF EXISTS (
 			on dbo.Workshops.workshop_id = dbo.WorkshopReservations.workshop_id
 		inner join dbo.ReservationDetails 
 			on dbo.ReservationDetails.reservation_details_id = dbo.WorkshopReservations.reservation_details_id
-		group by dbo.workshopreservations.reservation_id, inserted.num_spots
+		group by dbo.workshopreservations.reservation_details_id, inserted.num_spots
 		having sum(dbo.reservationdetails.num_spots) > inserted.num_spots
 	)
 BEGIN
