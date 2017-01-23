@@ -151,8 +151,6 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
     wshpResWriter = csv.writer(wshpResOut, delimiter='~')
     confResWriter = csv.writer(confResOut, delimiter='~')
     payReservStudID = 1
-    confResID = 1
-    wshpResID = 1
     for idx, attList in attendByConfDay.items():
         numAttByCompany = defaultdict(int)
         studentcards = defaultdict(list)
@@ -170,8 +168,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
             cost = float(priceByConfDay[idx]) * 0.85 * (spots - len(studentcards[company])) + float(priceByConfDay[idx]) * 0.85 * len(studentcards[company]) * 0.9
             dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
             resDetailsWriter.writerow([payReservStudID, ' ', company, payReservStudID, cost, spots, len(studentcards[company]), dateRes.strftime("%d.%m.%Y"), ' '])
-            confResWriter.writerow([confResID, idx, payReservStudID])
-            confResID += 1
+            confResWriter.writerow([idx, payReservStudID])
             datePaid = dateRes + timedelta(days=1)
             paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
             for number in studentcards[company]:
@@ -183,8 +180,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
                 cost = float(priceByConfDay[idx]) * 0.85 * 0.9
                 dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
                 resDetailsWriter.writerow([payReservStudID, client, ' ', payReservStudID, cost, 1, 1, dateRes.strftime("%d.%m.%Y"), ' '])
-                confResWriter.writerow([confResID, idx, payReservStudID])
-                confResID += 1
+                confResWriter.writerow([idx, payReservStudID])
                 datePaid = dateRes + timedelta(days=2)
                 paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
                 studOutWriter.writerow([payReservStudID, studentcardByAttendee[client]])
@@ -193,8 +189,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
                 cost = float(priceByConfDay[idx]) * 0.85
                 dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
                 resDetailsWriter.writerow([payReservStudID, client, ' ', payReservStudID, cost, 1, 0, dateRes.strftime("%d.%m.%Y"), ' '])
-                confResWriter.writerow([confResID, idx, payReservStudID])
-                confResID += 1
+                confResWriter.writerow([idx, payReservStudID])
                 datePaid = dateRes + timedelta(days=2)
                 paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
                 payReservStudID += 1
@@ -215,8 +210,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
             cost = float(priceByWorkshop[idx]) * 0.85 * (spots - len(studentcards[company])) + float(priceByWorkshop[idx]) * 0.85 * len(studentcards[company]) * 0.9
             dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
             resDetailsWriter.writerow([payReservStudID, ' ', company, payReservStudID, cost, spots, len(studentcards[company]), dateRes.strftime("%d.%m.%Y"), ' '])
-            wshpResWriter.writerow([wshpResID, idx, payReservStudID])
-            wshpResID += 1
+            wshpResWriter.writerow([idx, payReservStudID])
             datePaid = dateRes + timedelta(days=1)
             paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
             for number in studentcards[company]:
@@ -228,8 +222,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
                 cost = float(priceByWorkshop[idx]) * 0.85 * 0.9
                 dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
                 resDetailsWriter.writerow([payReservStudID, client, ' ', payReservStudID, cost, 1, 1, dateRes.strftime("%d.%m.%Y"), ' '])
-                wshpResWriter.writerow([wshpResID, idx, payReservStudID])
-                wshpResID += 1
+                wshpResWriter.writerow([idx, payReservStudID])
                 datePaid = dateRes + timedelta(days=2)
                 paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
                 studOutWriter.writerow([payReservStudID, studentcardByAttendee[client]])
@@ -238,8 +231,7 @@ with open('reservationDetails.csv', 'w', encoding='utf-16') as resDetOut, open('
                 cost = float(priceByWorkshop[idx]) * 0.85
                 dateRes = datetime.strptime(elDatetime.date(start = 2008, end = 2009), "%d.%m.%Y")
                 resDetailsWriter.writerow([payReservStudID, client, ' ', payReservStudID, cost, 1, 0, dateRes.strftime("%d.%m.%Y"), ' '])
-                wshpResWriter.writerow([wshpResID, idx, payReservStudID])
-                wshpResID += 1
+                wshpResWriter.writerow([idx, payReservStudID])
                 datePaid = dateRes + timedelta(days=2)
                 paymentWriter.writerow([payReservStudID, datePaid.strftime("%d.%m.%Y"), cost])
                 payReservStudID += 1

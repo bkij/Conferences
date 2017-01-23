@@ -64,13 +64,11 @@ CREATE TABLE Workshops (
 )
 
 CREATE TABLE ConferenceReservations (
-	reservation_id int PRIMARY KEY IDENTITY(1,1),
 	conference_day_id int NOT NULL,
 	reservation_details_id int NOT NULL UNIQUE
 )
 
 CREATE TABLE WorkshopReservations (
-	reservation_id int PRIMARY KEY IDENTITY(1,1),
 	workshop_id int NOT NULL,
 	reservation_details_id int NOT NULL UNIQUE
 )
