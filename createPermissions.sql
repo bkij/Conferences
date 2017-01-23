@@ -26,7 +26,13 @@ IF EXISTS(SELECT * FROM sys.database_principals WHERE name = 'innerDeveloper')
 DROP USER innerDeveloper
 CREATE USER innerDeveloper FOR LOGIN innerDev;
 
+-- Operacje
+GRANT SELECT ON schema::Conferences TO innerDeveloper;
+
 -- Procedury
+GRANT EXEC ON Conferences.dbo.CREATE_CONFERENCE TO innerDeveloper;
+GRANT EXEC ON Conferences.dbo.CREATE_CONFERENCE_DAY TO innerDeveloper;
+GRANT EXEC ON Conferences.dbo.CREATE_WORKSHOP TO innerDeveloper;
 GRANT EXEC ON Conferences.dbo.NUM_SPOTS_WS_CHANGE TO innerDeveloper;
 GRANT EXEC ON Conferences.dbo.PAYMENTS_LIST_PER_CLIENT TO innerDeveloper;
 GRANT EXEC ON Conferences.dbo.PAYMENTS_LIST_PER_COMPANY TO innerDeveloper;
@@ -48,7 +54,12 @@ IF EXISTS(SELECT * FROM sys.database_principals WHERE name = 'appDeveloper')
 DROP USER appDeveloper
 CREATE USER appDeveloper FOR LOGIN appDev;
 
--- Procdeury
+-- Operacje
+GRANT SELECT ON Conferences.Conferences TO appDeveloper;
+GRANT SELECT ON Conferences.ConferenceDays TO appDeveloper;
+GRANT SELECT ON Conferences.Workshops TO appDeveloper;
+
+-- Procedury
 GRANT EXEC ON Conferences.dbo.CREATE_RESERVATION TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.NUM_SPOTS_RESERVATION_CHANGE TO appDeveloper;
 GRANT EXEC ON Conferences.dbo.RESERVATION_CANCELLATION_CR TO appDeveloper;

@@ -1,4 +1,4 @@
-USE CONFERENCES
+ï»¿USE CONFERENCES
 
 
 
@@ -116,7 +116,7 @@ BEGIN
 	WHERE WORKSHOPS.WORKSHOP_ID = @workshopID
 END
 
--- zmieñ iloœæ miejsc w rezerwacji
+-- zmieÃ± iloÅ“Ã¦ miejsc w rezerwacji
 GO
 CREATE PROCEDURE NUM_SPOTS_RESERVATION_CHANGE (@newNumSpots smallint, @reservationID int)
 AS 
@@ -131,7 +131,7 @@ BEGIN
 END
 
 
--- zmieñ limit miejsc w danym dniu konferencji
+-- zmieÃ± limit miejsc w danym dniu konferencji
 GO
 CREATE PROCEDURE NUM_SPOTS_CONFDAY_CHANGE (@newNumSpots smallint , @ConferenceDayId INT)
 AS
@@ -168,6 +168,7 @@ from reservationdetails
 	where workshopreservations.reservation_id = @ReservationID
 END
 
+-- OpÅ‚acenie rezerwacji
 GO
 CREATE PROCEDURE PAY_FOR_RESERVATION (@resId int, @amountPaid money)
 AS 
@@ -186,7 +187,7 @@ BEGIN
 END
 
 
--- WIDOK (JAKO PROCEDURA): Listy osobowe uczestników konferencji na ka¿dy dzieñ
+-- WIDOK (JAKO PROCEDURA): Listy osobowe uczestnikÃ³w konferencji na kaÂ¿dy dzieÃ±
 GO
 CREATE PROCEDURE CONFERENCE_ATTENDEES_PER_DAY (@ConferenceDayId int) 
 AS
@@ -198,7 +199,7 @@ from dbo.Clients
 		on dbo.ConferenceDays.conference_day_id = dbo.ConferenceAttendees.conference_day_id 
 where dbo.ConferenceDays.conference_day_id =  @ConferenceDayId
 
--- WIDOK (jako procedura): Listy osobowe uczestników warsztatu na ka¿dy dzieñ
+-- WIDOK (jako procedura): Listy osobowe uczestnikÃ³w warsztatu na kaÂ¿dy dzieÃ±
 GO
 CREATE PROCEDURE WORKSHOP_ATTENDEES_PER_DAY (@ConferenceDayId int)
 AS
@@ -213,7 +214,7 @@ SELECT dbo.Clients.client_id, dbo.Clients.company_id, dbo.Clients.firstname, dbo
 where dbo.ConferenceDays.conference_day_id =  @ConferenceDayId
 
 
--- WIDOK (jako procedura): Listy p³atnoœci per klient 
+-- WIDOK (jako procedura): Listy pÂ³atnoÅ“ci per klient 
 GO
 CREATE PROCEDURE PAYMENTS_LIST_PER_CLIENT (@client_id int)
 AS
@@ -225,7 +226,7 @@ SELECT * from dbo.Payments
 where dbo.Clients.client_id = @client_id
 
 
--- WIDOK (jako procedura): Listy p³atnoœæ per firma
+-- WIDOK (jako procedura): Listy pÂ³atnoÅ“Ã¦ per firma
 GO
 CREATE PROCEDURE PAYMENTS_LIST_PER_COMPANY (@company_id int)
 AS
@@ -237,7 +238,7 @@ SELECT * from dbo.Payments
 where dbo.Companies.company_id = @company_id
 
 
--- WIDOK jako procedura : Historia p³atnoœci danego klienta
+-- WIDOK jako procedura : Historia pÂ³atnoÅ“ci danego klienta
 GO
 CREATE PROCEDURE PAYMENTS_HISTORY (@clientID int)
 AS 
@@ -249,3 +250,52 @@ from Payments
 		on dbo.ReservationDetails.client_id = dbo.Clients.client_id
 where dbo.Clients.client_id = @clientID
 
+-- Procedura wykonywana okresowo, anulowanie rezerwacji nieopÅ‚aconych na tydzieÅ„ od rezerwacji
+GO
+CREATE PROCEDURE CHECK_RESERVATIONS_FOR_CANCELLING
+AS
+UPDATE dbo.ReservationDetails
+SET reservation_cancellation_date = GETDATE()
+WHERE DATEADD(week, 1, reservation_date) >= GETDATE()
+
+-- Stworzenie konferencji
+GO
+CREATE PROCEDURE CREATE_CONFERENCE(@dateStart datetime, @dateEnd datetime, @title nvarchar(100), @ID int OUTPUT)
+AS
+BEGIN
+	DECLARE @IDTbl TABLE(ID int)
+
+	INSERT INTO Conferences(date_start, date_end, title)
+	OUTPUT inserted.conference_id INTO @IDTbl(ID)
+	VALUES(@dateStart, @dateEnd, @title)
+
+	SELECT @ID = ID FROM @IDTbl;
+END
+
+-- Stworzenie dnia konferencji
+GO
+CREATE PROCEDURE CREATE_CONFERENCE_DAY(@conferenceId int, @date datetime, @numSpots int, @price money, @ID int OUTPUT)
+AS
+BEGIN
+	DECLARE @IDTbl TABLE(ID int)
+
+	INSERT INTO ConferenceDays(conference_id, date, num_spots, price)
+	OUTPUT inserted.conference_day_id INTO @IDTbl(ID)
+	VALUES(@conferenceId, @date, @numSpots, @price)
+
+	SELECT @ID = ID FROM @IDTbl;
+END
+
+-- Stworzenie warsztatu
+GO
+CREATE PROCEDURE CREATE_WORKSHOP(@conferenceDayId int, @date datetime, @numSpots int, @price money, @title nvarchar(100), @ID int OUTPUT)
+AS
+BEGIN
+	DECLARE @IDTbl TABLE(ID int)
+
+	INSERT INTO Workshops(conference_day_id, date, num_spots, price, title)
+	OUTPUT inserted.workshop_id INTO @IDTbl(ID)
+	VALUES(@conferenceDayId, @date, @numSpots, @price, @title)
+
+	SELECT @ID = ID FROM @IDTbl;
+END

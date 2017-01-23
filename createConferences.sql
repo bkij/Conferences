@@ -163,8 +163,8 @@ ALTER TABLE Conferences
 	ADD CONSTRAINT ck_date_end
 	CHECK(date_start > GETDATE())
 ALTER TABLE Conferences
-	ADD CONSTRAINT ck_date_end_gt_date_start
-	CHECK(date_end >= DATEADD(hh, 12, date_start))
+	ADD CONSTRAINT ck_date_end_gte_date_start
+	CHECK(date_end >= date_start)
 
 ALTER TABLE Workshops
 	ADD CONSTRAINT ck_date_workshop

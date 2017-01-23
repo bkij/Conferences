@@ -1,4 +1,4 @@
-USE Conferences
+﻿USE Conferences
 
 
 
@@ -107,7 +107,7 @@ IF EXISTS (
 			dbo.ConferenceReservations.conference_day_id = inserted.conference_day_id
 		inner join dbo.ReservationDetails on
 			dbo.ReservationDetails.reservation_details_id = dbo.ConferenceReservations.reservation_details_id
-		group by dbo.ConferenceReservations.conference_id, inserted.num_spots 
+		group by dbo.ConferenceReservations.conference_day_id, inserted.num_spots 
 		having sum(dbo.reservationdetails.num_spots) > inserted.num_spots
 	)
 BEGIN
@@ -116,5 +116,57 @@ ROLLBACK TRANSACTION
 END
 END
 
+-- Trigger: anuluje rezerwacje klienta na warsztaty w danym dniu, jeśli anulował rezerwację na dzień konferencji
 
+GO
+CREATE TRIGGER CANCEL_WSHOP_AFTER_CONF_CANCEL
+ON dbo.ReservationDetails
+AFTER UPDATE AS
+BEGIN
+	SET NOCOUNT ON;
+	IF UPDATE(reservation_cancellation_date) AND EXISTS (
+		SELECT 'exists'
+		FROM inserted
+		INNER JOIN ReservationDetails rd ON rd.reservation_details_id = inserted.reservation_details_id
+		INNER JOIN WorkshopReservations wr ON wr.reservation_details_id = rd.reservation_details_id
+		WHERE rd.reservation_cancellation_date IS NOT NULL
+	)
+	BEGIN
+		UPDATE ReservationDetails
+		SET reservation_cancellation_date = GETDATE()
+		WHERE reservation_details_id IN (
+			SELECT rd.reservation_details_id
+			FROM ReservationDetails rd
+			INNER JOIN inserted ON inserted.client_id = rd.client_id OR inserted.company_id = rd.company_id
+			INNER JOIN WorkshopReservations wr ON rd.reservation_details_id = wr.reservation_details_id
+			INNER JOIN Workshops w ON w.workshop_id = wr.workshop_id
+			INNER JOIN ConferenceDays cd ON cd.conference_day_id = w.conference_day_id
+		)
+	END
+END
 
+-- Trigger brak możliwości rezerwacji na kilka warsztatów w tym samym czasie
+GO
+CREATE TRIGGER CHECK_NO_SIMULTANEOUS_WORSKHOPS
+ON dbo.WorkshopReservations
+AFTER INSERT AS
+BEGIN
+	SET NOCOUNT ON;
+	IF EXISTS (
+		SELECT 'exists'
+		FROM inserted
+		INNER JOIN ReservationDetails rd ON inserted.reservation_details_id = rd.reservation_details_id
+		INNER JOIN ReservationDetails rd2 ON rd.client_id = rd2.client_id OR rd.company_id = rd2.company_id
+		INNER JOIN WorkshopReservations wr ON rd2.reservation_details_id = wr.reservation_details_id
+		INNER JOIN Workshops w ON wr.workshop_id = w.workshop_id
+		WHERE w.[date] = (
+			SELECT sub_w.[date]
+			FROM Workshops sub_w
+			INNER JOIN inserted ON sub_w.workshop_id = inserted.workshop_id 
+		)
+	)
+	BEGIN
+		ROLLBACK TRANSACTION;
+		THROW 50001, 'Error - cannot reserve two workshops sharing a time slot', 16;
+	END
+END

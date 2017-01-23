@@ -5,7 +5,11 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
 - pełen dostęp do bazy
 
 ****** Programista aplikacji do użytku dla organizatorów konferencji ******
-- procedury:	zmiana ilości miejsc na warsztatach, (NUM_SPOTS_WS_CHANGE)
+- sql:          select na wszystko                                                                  
+- procedury:	stworzenie konferencji (CREATE_CONFERENCE)                                          
+                dodanie dnia konferencji (CREATE_CONFERENCE_DAY)                                    
+                dodanie warsztatu (CREATE_WORKSHOP)                                                 
+                zmiana ilości miejsc na warsztatach, (NUM_SPOTS_WS_CHANGE)
 				zmiana limitu miejsc w danym dniu konferencji (NUM_SPOTS_CONFDAY_CHANGE)
                 listy osobowe uczestników konferencji na dany dzień (CONFERENCE_ATTENDEES_PER_DAY)
 				listy osobowe uczestników warsztatu na dany dzień (WORKSHOP_ATTENDEES_PER_DAY)
@@ -17,6 +21,7 @@ Do sprawnego zarządzania stworzonym systemem bazodanowym konieczne jest zdefini
 				lista klientów najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT CLIENTS GETING THE SERVICES])
 				lista firm najczęściej korzystających z usług ([THE LIST OF MOST FREQUENT COMPANIES GETTING THE SERVICES])
 ****** Programista aplikacji wewnętrznych wykorzystywanych przez konsulatantów firmy, i zewnętrznych do użytku klientów ******
+- sql:          select na konferencje, warsztaty, dni                                               
 - procedury:	tworzenie rezerwacji (CREATE_RESERVATION)
                 zmiana ilości miejsc w rezerwacji (NUM_SPOTS_RESERVATION_CHANGE)
 				anulowanie rezerwacji na konferencję (RESERVATION_CANCELLATION_CR)
