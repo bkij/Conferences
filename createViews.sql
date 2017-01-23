@@ -5,7 +5,7 @@ USE CONFERENCES
 -- WIDOK: NAJPOPULARNIEJSZE KONFERENCJE - pokazuje listê 10 konferencji najbardziej obleganych
 GO
 CREATE VIEW [The most popular conferences] AS
-SELECT  TOP 10 SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Conferences.conference_id,  dbo.Conferences.title,
+SELECT  TOP 10 PERCENT SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Conferences.conference_id,  dbo.Conferences.title,
 	dbo.Conferences.date_start, dbo.Conferences.date_end
 FROM dbo.CONFERENCES
 	inner join dbo.ConferenceDays
@@ -24,7 +24,7 @@ order by [The number of takers] desc
 -- WIDOK: NAJPOPULARNIEJSZE WARSZTATY - pokazuje listê 10 warsztatów najbardziej obleganych
 GO
 CREATE VIEW [The most popular workshops] AS
-SELECT TOP 10 SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Workshops.workshop_id, 
+SELECT TOP 10 PERCENT SUM(dbo.reservationdetails.num_spots) as [The number of takers], dbo.Workshops.workshop_id, 
 	dbo.Workshops.conference_day_id, dbo.Workshops.title, dbo.Workshops.num_spots, dbo.Workshops.date, dbo.Workshops.price
 FROM dbo.WORKSHOPS
 	inner join dbo.workshopreservations 
