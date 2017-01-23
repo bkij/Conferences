@@ -28,7 +28,7 @@ DROP USER innerDeveloper
 CREATE USER innerDeveloper FOR LOGIN innerDev;
 
 -- Operacje
-GRANT SELECT ON schema::Conferences TO innerDeveloper;
+GRANT SELECT ON Conferences TO innerDeveloper;
 
 -- Procedury
 GRANT EXEC ON Conferences.dbo.CREATE_CONFERENCE TO innerDeveloper;
@@ -56,9 +56,9 @@ DROP USER appDeveloper
 CREATE USER appDeveloper FOR LOGIN appDev;
 
 -- Operacje
-GRANT SELECT ON Conferences.Conferences TO appDeveloper;
-GRANT SELECT ON Conferences.ConferenceDays TO appDeveloper;
-GRANT SELECT ON Conferences.Workshops TO appDeveloper;
+GRANT SELECT ON Conferences TO appDeveloper;
+GRANT SELECT ON ConferenceDays TO appDeveloper;
+GRANT SELECT ON Workshops TO appDeveloper;
 
 -- Procedury
 GRANT EXEC ON Conferences.dbo.CREATE_RESERVATION TO appDeveloper;

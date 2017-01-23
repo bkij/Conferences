@@ -1,12 +1,12 @@
 -- Create an empty database
-USE master
+USE master;
 GO
 IF EXISTS(SELECT * FROM sys.databases WHERE name = 'Conferences')
 DROP DATABASE Conferences
-CREATE DATABASE Conferences
+CREATE DATABASE Conferences;
 
 -- Create tables
-USE Conferences
+USE Conferences;
 GO
 
 CREATE TABLE Clients (
