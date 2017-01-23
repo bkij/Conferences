@@ -1,4 +1,3 @@
--- TODO: Cascade on update/delete?
 -- Create an empty database
 USE master
 GO
