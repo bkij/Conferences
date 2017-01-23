@@ -1,6 +1,5 @@
 USE Conferences
 
---TODO: Some kind of error here, investigate
 SET DATEFORMAT dmy
 
 BULK INSERT Clients 
@@ -107,6 +106,16 @@ WITH (
 SET DATEFORMAT dmy
 BULK INSERT Payments
 FROM 'C:\Users\kveld\Desktop\Conferences\payments.csv'
+WITH (
+	FIELDTERMINATOR = '~',
+	KEEPIDENTITY,
+	KEEPNULLS,
+	ROWTERMINATOR = '\r\n',
+	DATAFILETYPE = 'widechar'
+)
+
+BULK INSERT StudentcardPool
+FROM 'C:\Users\kveld\Desktop\Conferences\studentCardPool.csv'
 WITH (
 	FIELDTERMINATOR = '~',
 	KEEPIDENTITY,
