@@ -10,7 +10,6 @@ CREATE DATABASE Conferences
 USE Conferences
 GO
 
--- TODO: Student card number - other type? International numbers?
 CREATE TABLE Clients (
 	client_id int PRIMARY KEY IDENTITY(1,1),
 	company_id int,
@@ -98,7 +97,6 @@ CREATE TABLE Payments (
 	amount_paid money
 )
 
--- TODO: Constraints, defaults, uniques
 -- TODO: If time allows: Think about cancelling conferences/days with CASCADES and stuff
 
 -- Relations
@@ -152,7 +150,7 @@ ALTER TABLE ReservationDetails
 	ADD CONSTRAINT fk_reservation_company
 	FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 
-ALTER TABLE StudencardPool
+ALTER TABLE StudentcardPool
 	ADD CONSTRAINT fk_studentcard_reservation
 	FOREIGN KEY (reservation_details_id) REFERENCES ReservationDetails(reservation_details_id)
 
@@ -178,7 +176,7 @@ ALTER TABLE Companies
 
 ALTER TABLE ReservationDetails
 	ADD CONSTRAINT ck_reservation_date
-	CHECK(reservation_date > GETDATE())
+	CHECK(reservation_date >= GETDATE())
 ALTER TABLE ReservationDetails
 	ADD CONSTRAINT ck_cancellation_date
 	CHECK(reservation_cancellation_date > reservation_date)
@@ -186,7 +184,7 @@ ALTER TABLE ReservationDetails
 	
 ALTER TABLE Payments
 	ADD CONSTRAINT ck_payment_date
-	CHECK(date_paid > GETDATE())
+	CHECK(date_paid >= GETDATE())
 
 -- Either a client_id or company_id must be null
 ALTER TABLE ReservationDetails
